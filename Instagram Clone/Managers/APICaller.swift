@@ -16,7 +16,7 @@ struct APICaller {
     func createPost(withData post: toPost, image: UIImage, completion: @escaping (Bool) -> ()) {
         
         //================= convert image into imageData =================================
-        guard let imageData = image.jpegData(compressionQuality: 1) else {
+        guard let imageData = image.pngData() else {
             print("error convert to jpeg data!")
             return
         }
@@ -136,7 +136,7 @@ struct APICaller {
     func createUser(with userInfo: [String: Any], completion: @escaping (Bool) -> Void) {
         
         //================= convert image into imageData =================================
-        guard let imageData = (userInfo["profilePic"] as? UIImage)?.jpegData(compressionQuality: 1) else {
+        guard let imageData = (userInfo["profilePic"] as? UIImage)?.pngData() else {
             print("cannot convert to jpeg data!")
             return
         }

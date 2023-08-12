@@ -14,6 +14,8 @@ class PhotoSelectorViewController: UIViewController {
     private var allPhoto = [UIImage]()
     private var allAsset = [PHAsset]()
     
+    var currentRequestIDKey: Int?
+    
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
         return self?.createLayoutSection(section: sectionIndex)
     })
@@ -52,6 +54,7 @@ class PhotoSelectorViewController: UIViewController {
         }
         let vc = SharePhotoViewController(selectedPhoto: selectedImage)
         navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     
@@ -168,6 +171,8 @@ extension PhotoSelectorViewController: UICollectionViewDataSource {
         return cell
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let headerCell = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
@@ -181,9 +186,19 @@ extension PhotoSelectorViewController: UICollectionViewDataSource {
         PHImageManager.default().requestImage(for: selectedAsset,
                                               targetSize: CGSize(width: 600, height: 600), //metal api validation
                                               contentMode: .default,
-                                              options: nil) { image, info in
-            DispatchQueue.main.async {
+                                              options: nil) { [weak self] image, info in
+            DispatchQueue.main.async { // prevent preview image replace when select too fast
+                
+                let isLowQualityImage = (info!["PHImageResultIsDegradedKey"] as! Int) == 1
+                let requestIDKey = info!["PHImageResultRequestIDKey"] as! Int
+                
+                if isLowQualityImage {
+                    self?.currentRequestIDKey = info!["PHImageResultRequestIDKey"] as? Int
+                }
+                
+                if requestIDKey != self?.currentRequestIDKey { return }
                 headerCell.configure(image: image)
+                self?.selectedImage = image
             }
         }
         

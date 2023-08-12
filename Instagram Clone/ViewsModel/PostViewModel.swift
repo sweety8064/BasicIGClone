@@ -40,7 +40,7 @@ class PostViewModel {
         self.post_date_utc0 = post_date_utc0
         self.user_islike = user_islike
         
-        APICaller.shared.fetchImage(fromUrl: user_image_url) { [weak self] result in
+        APICaller.shared.fetchImage(fromUrl: user_image_url) { [weak self] result in // profile image
             switch result {
             case .success(let image):
                 self?.userImage = image
@@ -50,7 +50,7 @@ class PostViewModel {
             }
         }
         
-        APICaller.shared.fetchImage(fromUrl: post_image_url) { [weak self] result in
+        APICaller.shared.fetchImage(fromUrl: post_image_url) { [weak self] result in // post image
             switch result {
             case .success(let image):
                 self?.postImage = image
