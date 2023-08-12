@@ -133,7 +133,7 @@ struct APICaller {
         task.resume()
     }
     
-    func createUser(with userInfo: [String: Any], completion: @escaping (Bool) -> Void) {
+    func createUser(with userInfo: [String: Any], completion: @escaping (Error?) -> Void) {
         
         //================= convert image into imageData =================================
         guard let imageData = (userInfo["profilePic"] as? UIImage)?.pngData() else {
@@ -186,11 +186,11 @@ struct APICaller {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let _ = data, error == nil else {
                 print("error occured in adduser")
-                completion(false)
+                completion(error)
                 return
             }
             
-            completion(true)
+            completion(nil)
         }
         
         task.resume()

@@ -21,11 +21,10 @@ class SessionManager {
         return currentIGUser
     }
     
-    func signIn(withEmail email: String, password: String, completion: @escaping (Bool) -> Void) {
+    func signIn(withEmail email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             guard let authResult = authResult, error == nil else {
-                print(error?.localizedDescription)
-                completion(false)
+                completion(error)
                 return
             }
             
@@ -33,10 +32,10 @@ class SessionManager {
                 switch result {
                 case .success(let user):
                     self?.currentIGUser = user
-                    completion(true)
+                    completion(nil)
                 case .failure(let error):
                     print(error.localizedDescription)
-                    completion(false)
+                    completion(error)
                 }
             }
             
@@ -49,18 +48,18 @@ class SessionManager {
                 password: String,
                 username: String,
                 profileImage: UIImage,
-                completion: @escaping (Bool) -> Void) {
+                completion: @escaping (Error?) -> Void) {
         
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             guard let user = authResult?.user, error == nil else {
-                print(error?.localizedDescription)
+                completion(error)
                 return
             }
             
             //=================== update profile name =================================
             let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
             changeRequest?.displayName = username
-            changeRequest?.commitChanges { [weak self] error in
+            changeRequest?.commitChanges { error in
                 if let error = error {
                     print(error)
                     return
@@ -74,12 +73,14 @@ class SessionManager {
                     "profilePic": profileImage
                 ]
                 
-                APICaller.shared.createUser(with: jsonUser) { success in
-                    if success {
-                        completion(true)
-                    } else {
-                        completion(false)
+                APICaller.shared.createUser(with: jsonUser) { error in
+                    
+                    guard error == nil else {
+                        completion(error)
+                        return
                     }
+                    completion(nil)
+
                 }
                 
             }

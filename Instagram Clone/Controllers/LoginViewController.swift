@@ -163,13 +163,14 @@ class LoginViewController: UIViewController {
             return
         }
         
-        SessionManager.shared.signIn(withEmail: email, password: password) { success in
-            if success {
-                DispatchQueue.main.async { [weak self] in
-                    self?.dismiss(animated: true) // this code trigger tabBarController viewDidAppear
+        SessionManager.shared.signIn(withEmail: email, password: password) { [weak self] error in
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    self?.presentAlert(title: "Error Occured", message: error!.localizedDescription)
+                    return
                 }
+                self?.dismiss(animated: true) // this code trigger tabBarController's viewDidAppear func
             }
-            
         }
         
     }
@@ -186,6 +187,15 @@ class LoginViewController: UIViewController {
 
         
         NSLayoutConstraint.activate(allConstraints)
+    }
+    
+    private func presentAlert(title: String, message: String) {
+        let cancelAction = UIAlertAction(title: "OK", style: .default) { action in }
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
     }
     
     deinit {

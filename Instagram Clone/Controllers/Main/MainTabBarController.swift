@@ -64,7 +64,7 @@ class MainTabBarController: UITabBarController {
         let vc4 = LikeViewController()
         let vc5 = ProfileViewController()
         
-        vc1.delegate = self
+        vc5.delegate = self
         
         //============= define callback function =====================
         
@@ -143,7 +143,7 @@ extension MainTabBarController: UITabBarControllerDelegate {
 
 
 
-extension MainTabBarController: HomeViewControllerDelegate {
+extension MainTabBarController: ProfileViewControllerDelegate {
     func didSignOut() {
         presentLoginVC()
     }

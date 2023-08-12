@@ -136,28 +136,46 @@ class RegisterViewController: UIViewController {
         configureAutoLayout()
     }
     
+    private func presentAlert(title: String, message: String) {
+        let cancelAction = UIAlertAction(title: "OK", style: .default) { action in }
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
+    }
+    
     @objc private func signUpButtonDidPress() {
         
         guard let email = emailTextField.text,
               let password = passwordTextField.text,
-              let username = usernameTextField.text,
-              let imagePicked = imagePicked else {
+              let username = usernameTextField.text else {
+            presentAlert(title: "Uncomplete Field", message: "Please fill into blank field for register")
+            return
+        }
+        
+        guard let imagePicked = imagePicked else {
+            presentAlert(title: "Photo Is Necessary", message: "Please add photo to register")
             return
         }
         
         SessionManager.shared.signUp(withEmail: email,
                                      password: password,
                                      username: username,
-                                     profileImage: imagePicked) { [weak self] success in
+                                     profileImage: imagePicked) { [weak self] error in
             
-            if success {
-                DispatchQueue.main.async { [weak self] in
-                    self?.navigationController?.popViewController(animated: true)
-                    self?.handle?(email, password) //notify "registerViewController.handle" in LoginViewController
-                    print("Successfully register!")
-                }
-                
+            guard error == nil else {
+                self?.presentAlert(title: "Error occured", message: error!.localizedDescription)
+                return
             }
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+                self?.handle?(email, password) //notify "registerViewController.handle" in LoginViewController
+                print("Successfully register!")
+            }
+                
+
             
         }
         
@@ -165,29 +183,6 @@ class RegisterViewController: UIViewController {
     
     deinit {
         print("RegisterViewController deinit!")
-    }
-    
-    private func addUserToDatabase(with user: User) {
-        
-        guard let imagePicked = imagePicked else {
-            print("imagePicked is nil!")
-            return
-        }
-        
-        let jsonUser: [String: Any] = [
-            "uid": user.uid,
-            "name": user.displayName!,
-            "email": user.email!,
-            "profilePic": imagePicked
-        ]
-        
-        APICaller.shared.createUser(with: jsonUser) { success in
-            if success {
-                print("yes")
-            } else {
-                print("no")
-            }
-        }
     }
     
     @objc private func didTapSelectPhotoButton() {

@@ -8,7 +8,13 @@
 import UIKit
 import FirebaseAuth
 
+protocol ProfileViewControllerDelegate: AnyObject {
+    func didSignOut()
+}
+
 class ProfileViewController: UIViewController {
+    
+    weak var delegate: ProfileViewControllerDelegate?
     
     var currentIGUser: InstagramUser?
     
@@ -173,26 +179,6 @@ class ProfileViewController: UIViewController {
         
         //updateUnderlaySVContentSize()
         
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews() // 715 + 113 = 828
-        
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-//            print("start")
-//            self.underlayScrollView.contentSize.height = 1557
-//        }
-
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-//            print("end")
-//            self.underlayScrollView.contentSize.height = 1557
-//
-//        }
     }
     
     private func updateUnderlaySVContentSize() {
@@ -362,7 +348,24 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func didTapNBSettings() {
+        let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] action in
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            self?.delegate?.didSignOut()
+        }
         
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in }
+        
+        let alert = UIAlertController()
+        
+        alert.addAction(signOutAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
     }
     
     @objc func didTapEditProfileButton() {

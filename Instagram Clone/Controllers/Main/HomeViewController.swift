@@ -7,17 +7,11 @@
 import UIKit
 import FirebaseAuth
 
-protocol HomeViewControllerDelegate: AnyObject {
-    func didSignOut()
-}
-
 class HomeViewController: UIViewController {
     
     var posts = [Post]()
     var viewModels = [PostViewModel]()
     var sessionUser: InstagramUser?
-    
-    weak var delegate: HomeViewControllerDelegate?
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -141,14 +135,6 @@ class HomeViewController: UIViewController {
     
     @objc private func didTapNBSignOut() {
         
-        do {
-            try Auth.auth().signOut()
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        delegate?.didSignOut()
     }
     
     @objc private func didTapNBCamera() {
