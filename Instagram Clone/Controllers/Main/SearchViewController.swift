@@ -49,6 +49,7 @@ class SearchViewController: UIViewController {
                               bottom: view.bottomAnchor,
                               trailing: view.trailingAnchor)
         collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: "searchCell")
+        collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
         

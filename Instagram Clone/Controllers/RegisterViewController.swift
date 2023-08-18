@@ -126,6 +126,9 @@ class RegisterViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                         action: #selector(handleTapOnView)))
+        
         view.addSubview(selectPhotoContainer)
         view.addSubview(selectPhotoButton)
         view.addSubview(stackView)
@@ -134,6 +137,12 @@ class RegisterViewController: UIViewController {
         view.addSubview(signInButton)
         
         configureAutoLayout()
+    }
+    
+    @objc private func handleTapOnView() {
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        usernameTextField.resignFirstResponder()
     }
     
     private func presentAlert(title: String, message: String) {

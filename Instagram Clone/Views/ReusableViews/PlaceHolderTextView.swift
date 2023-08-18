@@ -9,11 +9,9 @@ import UIKit
 
 class PlaceHolderTextView: UITextView {
     
-    let placeHolder: UILabel = {
+    let placeHolderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Add a caption..."
         label.textColor = .lightGray
-        label.font = UIFont.systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -23,12 +21,12 @@ class PlaceHolderTextView: UITextView {
         
         delegate = self
         
-        addSubview(placeHolder)
+        addSubview(placeHolderLabel)
         
-        placeHolder.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
-        placeHolder.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
-        placeHolder.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        placeHolder.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        placeHolderLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
+        placeHolderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
+        placeHolderLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        placeHolderLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         
     }
@@ -42,7 +40,7 @@ class PlaceHolderTextView: UITextView {
 extension PlaceHolderTextView: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        placeHolder.isHidden = !text.isEmpty
+        placeHolderLabel.isHidden = !text.isEmpty
     }
   
 }

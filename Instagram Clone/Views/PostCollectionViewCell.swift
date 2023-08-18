@@ -9,11 +9,14 @@ import UIKit
 
 protocol PostCollectionViewCellDelegate: AnyObject {
     func didTapLikeButton(for cell: PostCollectionViewCell)
+    func didTapCommentButton(post_id: Int?)
 }
 
 class PostCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: PostCollectionViewCellDelegate?
+    
+    var post_id: Int?
     
     let postHeaderContainer: UIView = {
         let container = UIView()
@@ -62,7 +65,6 @@ class PostCollectionViewCell: UICollectionViewCell {
     let likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "like_unselected"), for: .normal)
-        button.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         return button
     }()
     
@@ -134,7 +136,8 @@ class PostCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(postCaptionLabel)
         contentView.addSubview(timeAgoLabel)
         
-        
+        likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(didTapCommentButton), for: .touchUpInside)
     }
     
     override func layoutSubviews() {
@@ -153,6 +156,10 @@ class PostCollectionViewCell: UICollectionViewCell {
         handleLikeCount(!isLike)
         isLike = !isLike
         delegate?.didTapLikeButton(for: self)
+    }
+    
+    @objc private func didTapCommentButton() {
+        delegate?.didTapCommentButton(post_id: post_id)
     }
     
     private func handleLikeCount(_ isLike: Bool) {
@@ -207,7 +214,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with post: PostViewModel) {
-        
+        self.post_id = post.post_id
         userNameLabel.text = post.poster_name
         userProfileView.image = post.userImage
         userPostImageView.image = post.postImage

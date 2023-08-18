@@ -59,6 +59,7 @@ class ListViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - 44)
         collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
     }

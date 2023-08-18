@@ -11,7 +11,6 @@ extension UIColor {
     
     static var mainBlue = UIColor.rgb(red: 17, green: 154, blue: 237)
     static var lightBlue = UIColor.rgb(red: 149, green: 204, blue: 244)
-    static var lightGray = UIColor(white: 0, alpha: 0.2)
     
     static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
         return UIColor(red: red/255,

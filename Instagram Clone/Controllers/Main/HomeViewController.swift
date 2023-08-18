@@ -39,8 +39,6 @@ class HomeViewController: UIViewController {
         
     }
     
-
-    
     func fetchPost(completion: (() -> Void)? = nil) {
         
         guard let uid = sessionUser?.user_uuid else {
@@ -70,7 +68,8 @@ class HomeViewController: UIViewController {
     
     func configureViewModels() {
         for post in posts {
-            viewModels.append(PostViewModel(poster_name: post.post_username,
+            viewModels.append(PostViewModel(post_id: post.post_id,
+                                            poster_name: post.post_username,
                                             post_image_url: post.image_url,
                                             user_image_url: post.user_image_url,
                                             total_like: post.total_like,
@@ -92,6 +91,7 @@ class HomeViewController: UIViewController {
         collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: "postCell")
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = .systemBackground
         collectionView.refreshControl = refreshControl
     }
     
@@ -199,6 +199,16 @@ extension HomeViewController: UICollectionViewDelegate {
 }
 
 extension HomeViewController: PostCollectionViewCellDelegate {
+    func didTapCommentButton(post_id: Int?) {
+        
+        let vc = CommentViewController()
+        vc.post_id = post_id
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: false)
+        
+
+    }
+    
     func didTapLikeButton(for cell: PostCollectionViewCell) {
         
         guard let indexPath = collectionView.indexPath(for: cell) else { // get indexpath of return cell
@@ -228,3 +238,4 @@ extension HomeViewController: PostCollectionViewCellDelegate {
     
     
 }
+

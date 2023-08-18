@@ -24,6 +24,7 @@ class SharePhotoViewController: UIViewController {
         textView.backgroundColor = .white
         textView.font = UIFont.systemFont(ofSize: 14)
         textView.autocorrectionType = .no
+        textView.placeHolderLabel.text = "Add a caption..."
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()

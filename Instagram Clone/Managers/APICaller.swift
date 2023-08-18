@@ -73,7 +73,7 @@ struct APICaller {
         task.resume()
     }
     
-    func fetchPost(withUID userUID: String ,completion: @escaping (Result<[Post], Error>) -> Void) {
+    func fetchPost(withUID userUID: String, completion: @escaping (Result<[Post], Error>) -> Void) {
         var request = URLRequest(url: URL(string: baseURL + "data")!)
         
         let json = [
@@ -198,7 +198,7 @@ struct APICaller {
     
     func fetchUsers(completion: @escaping (Result<[InstagramUser], Error>) -> Void) {
          
-        var request = URLRequest(url: URL(string: baseURL + "users")!)
+        let request = URLRequest(url: URL(string: baseURL + "users")!)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
@@ -388,4 +388,60 @@ struct APICaller {
         task.resume()
         
     }
+    
+    func addComment(with comment: [String: Any], completion: @escaping (Error?) -> Void) {
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: comment) else {
+            print("cannot convert to comment jsonData")
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: baseURL + "addcomment")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, reponse, error in
+            guard let _ = data, error == nil else {
+                completion(error)
+                return
+            }
+            
+            completion(nil)
+        }
+        
+        task.resume()
+        
+        
+    }
+    
+    func fetchComment(with post_id: [String: Int], completion: @escaping (Result<[Comment], Error>) -> Void) {
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
+            print("cannot convert to jsonData from fetchComment")
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: baseURL + "fetchcomment")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([Comment].self, from: data)
+                completion(.success(result))
+            } catch {
+                completion(.failure(error))
+            }
+            
+        }
+        task.resume()
+    }
+
 }
