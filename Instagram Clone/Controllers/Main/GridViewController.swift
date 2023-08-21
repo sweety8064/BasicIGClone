@@ -9,19 +9,15 @@ import UIKit
 import XLPagerTabStrip
 import SDWebImage
 
-protocol GridViewControllerDelegate: AnyObject {
-    func didScroll(_ scrollView: UIScrollView)
-}
-
 protocol GridListViewControllerDataSource: AnyObject {
-    func initProfilePost(completion: @escaping () -> Void)
     
     func fetchProfilePost() -> [PostViewModel]
+    
+    func didFinishConfigCV()
 }
 
 class GridViewController: UIViewController {
     
-    weak var delegate: GridViewControllerDelegate?
     weak var dataSource: GridListViewControllerDataSource?
        
     lazy var collectionView = UICollectionView(
@@ -34,18 +30,30 @@ class GridViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataSource?.initProfilePost { [weak self] in
-            DispatchQueue.main.async {
-                self?.configureCollectionView()
-            }
-        }
+        configureCollectionView()
     }
     
+    var isFirstTimeInit = true
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if isFirstTimeInit {
+            view.layoutIfNeeded()
+            dataSource?.didFinishConfigCV()
+            isFirstTimeInit = false
+        }
+        
+    }
+    
+
+
     
     private func configureCollectionView() {
         collectionView.isScrollEnabled = false
         view.addSubview(collectionView)
-        collectionView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - 44)
+        collectionView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 671 - 44)
+        // 671 is get from (full view - view.safeareatop - view.safeareabottom) and 44 (buttonBarViewHeight)
         collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
@@ -75,12 +83,6 @@ class GridViewController: UIViewController {
         return section
     }
     
-    
-    
-    
-    
-    func configure() {}
-
 
 }
 
@@ -90,7 +92,6 @@ extension GridViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PhotoCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
         
         if let dataSource = dataSource,
            let postImageUrl = URL(string: dataSource.fetchProfilePost()[indexPath.row].post_image_url) {
@@ -110,11 +111,11 @@ extension GridViewController: UICollectionViewDataSource {
 
 extension GridViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("click")
+
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        delegate?.didScroll(scrollView)
+
     }
     
     

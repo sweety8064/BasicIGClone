@@ -11,11 +11,12 @@ import UIKit
 protocol XLViewControllerDelegate: AnyObject {
     func didChangePage(_ fromIndex: Int, _ toIndex: Int)
     func didFetchPost()
+    func didFinishConfigCV()
 }
 
 class XLViewController: ButtonBarPagerTabStripViewController {
     
-    var currentIGUser: InstagramUser?
+    var currentIGUser: InstagramUser
     
     weak var xlDelegate: XLViewControllerDelegate?
     
@@ -30,18 +31,33 @@ class XLViewController: ButtonBarPagerTabStripViewController {
         
     }
     
-    
-    private func fetchPost(completion: (([Post]) -> Void)? = nil) {
+    init(currentIGUser: InstagramUser) {
         
-        guard let currentIGUserUID = self.currentIGUser?.user_uuid else {
-            print("currentIGUser is nil from xlViewController")
-            return
+        self.currentIGUser = currentIGUser
+        super.init(nibName: nil, bundle: nil)
+        
+        self.fetchPost() { [weak self] posts in
+            
+            self?.posts = posts
+            self?.configureViewModels()
+            self?.xlDelegate?.didFetchPost()
         }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+
+    
+    
+    private func fetchPost(completion: @escaping ([Post]) -> Void) {
+
         
-        APICaller.shared.fetchPersonalPost(withUserUID: currentIGUserUID) { [weak self] result in
+        APICaller.shared.fetchPersonalPost(withUserUID: self.currentIGUser.user_uuid) { result in
             switch result {
             case .success(let model):
-                completion?(model)
+                completion(model)
             case .failure(let error):
                 print(error.localizedDescription)
                 
@@ -123,11 +139,10 @@ extension XLViewController: GridListViewControllerDataSource {
         return self.viewModels
     }
     
-    func initProfilePost(completion: @escaping () -> Void) {
-        fetchPost() { [weak self] posts in
-            self?.posts = posts
-            self?.configureViewModels()
-            completion()
-        }
+
+    func didFinishConfigCV() {
+        
+        xlDelegate?.didFinishConfigCV()
     }
+    
 }

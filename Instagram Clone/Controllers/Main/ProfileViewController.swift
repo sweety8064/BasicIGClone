@@ -97,8 +97,8 @@ class ProfileViewController: UIViewController {
         return view
     }()
     
-    let xlViewController: XLViewController = {
-        let vc = XLViewController()
+    lazy var xlViewController: XLViewController = {
+        let vc = XLViewController(currentIGUser: currentIGUser!)
         return vc
     }()
     
@@ -132,7 +132,10 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        return refreshControl
+    }()
     
 
     
@@ -142,18 +145,16 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        underlayScrollView.delegate = self
-        xlViewController.xlDelegate = self
+        
         
         if currentIGUser == nil {
             currentIGUser = SessionManager.shared.getUser()
         }
         
-
-
-
+        containerScrollView.refreshControl = refreshControl
         
         
+
         view.addSubview(underlayScrollView)
         underlayScrollView.addSubview(containerScrollView)
         containerScrollView.addSubview(contentView)
@@ -162,23 +163,13 @@ class ProfileViewController: UIViewController {
         headerView.addSubview(stackView)
         headerView.addSubview(editProfileButton)
         headerView.addSubview(separateLine)
-        
-        xlViewController.currentIGUser = self.currentIGUser // must be first otherwise will be nil
-        addChild(xlViewController)
-        contentView.addSubview(xlViewController.view)
-        didMove(toParent: self)
-        
-        
-        
+          
         setProfileImage(imageUrl: currentIGUser?.profile_image_url ?? "")
         fetchUserProfile()
         configureNavigationBar()
         configureAutoLayout()
         
-        view.layoutIfNeeded()
-        
-        //updateUnderlaySVContentSize()
-        
+        xlViewController.xlDelegate = self // xlViewController will first init at here
     }
     
     private func updateUnderlaySVContentSize() {
@@ -186,7 +177,7 @@ class ProfileViewController: UIViewController {
         guard let nearestScrollView = getNearestScrollViewInSubView() else { fatalError() }
         let buttonBarViewHeight = xlViewController.buttonBarView.frame.height
         
-        underlayScrollView.contentSize.height = headerView.frame.height + nearestScrollView.contentSize.height + buttonBarViewHeight
+        underlayScrollView.contentSize.height = max(headerView.frame.height + nearestScrollView.contentSize.height + buttonBarViewHeight, view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom + headerView.frame.height)
         
         
     }
@@ -326,11 +317,7 @@ class ProfileViewController: UIViewController {
                                trailing: headerView.trailingAnchor,
                                topConstant: 20, height: 0.5)
 
-        xlViewController.view.anchor(top: headerView.bottomAnchor,
-                                     leading: contentView.leadingAnchor,
-                                     bottom: contentView.bottomAnchor,
-                                     trailing: contentView.trailingAnchor,
-                                     height: 715) // view - safeTopbottom - buttonBarHeight(44)
+        
         
         
         
@@ -471,11 +458,11 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) { //underlayScrollView 1400 1800
-
-        self.containerScrollView.contentOffset.y = scrollView.contentOffset.y
         
-        if scrollView.contentOffset.y > headerView.frame.maxY {
-            self.containerScrollView.contentOffset.y = headerView.frame.maxY
+        self.containerScrollView.contentOffset.y = scrollView.contentOffset.y
+
+        if scrollView.contentOffset.y > headerView.frame.maxY { // if reach the headview height
+            self.containerScrollView.contentOffset.y = headerView.frame.maxY // lock the container offset
             
             getNearestScrollViewInSubView()?.contentOffset.y = scrollView.contentOffset.y - headerView.frame.maxY
 
@@ -490,6 +477,8 @@ extension ProfileViewController: UIScrollViewDelegate {
         
         lastContentOffset = scrollView.contentOffset.y
         //======================================================================================
+        
+        
     }
 }
 
@@ -497,7 +486,21 @@ extension ProfileViewController: UIScrollViewDelegate {
 
 extension ProfileViewController: XLViewControllerDelegate {
     func didFetchPost() {
-        self.updateUnderlaySVContentSize()
+        
+        DispatchQueue.main.async { [unowned self] in
+            self.addChild(self.xlViewController)
+            self.contentView.addSubview((self.xlViewController.view)!)
+            self.didMove(toParent: self)
+            
+            self.xlViewController.view.anchor(top: self.headerView.bottomAnchor,
+                                              leading: self.contentView.leadingAnchor,
+                                              bottom: self.contentView.bottomAnchor,
+                                              trailing: self.contentView.trailingAnchor,
+                                              height: 715) // view - safeTopbottom - buttonBarHeight(44)
+            
+            
+        }
+        
     }
     
     func didChangePage(_ fromIndex: Int, _ toIndex: Int) {
@@ -514,5 +517,12 @@ extension ProfileViewController: XLViewControllerDelegate {
         
     }
     
+    func didFinishConfigCV() {
+        updateUnderlaySVContentSize()
+        underlayScrollView.delegate = self
+    }
+    
 
 }
+
+
