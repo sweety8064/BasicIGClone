@@ -10,6 +10,7 @@ import UIKit
 protocol PostCollectionViewCellDelegate: AnyObject {
     func didTapLikeButton(for cell: PostCollectionViewCell)
     func didTapCommentButton(post_id: Int?)
+    func didTapOptionMenuButton(post_id: Int)
 }
 
 class PostCollectionViewCell: UICollectionViewCell {
@@ -43,6 +44,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     lazy var optionMenuButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("•••", for: .normal)
+        button.addTarget(self, action: #selector(didTapOptionMenuButton), for: .touchUpInside)
         return button
     }()
     
@@ -145,7 +147,15 @@ class PostCollectionViewCell: UICollectionViewCell {
         configureAutoLayout()
     }
     
-
+    @objc private func didTapOptionMenuButton() {
+        
+        guard let post_id = post_id else {
+            print("post_id is nil from didtapoptionmenubutton")
+            return
+        }
+        
+        delegate?.didTapOptionMenuButton(post_id: post_id)
+    }
     
     @objc private func didTapLikeButton() {
         

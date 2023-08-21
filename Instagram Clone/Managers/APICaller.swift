@@ -444,6 +444,26 @@ struct APICaller {
         task.resume()
     }
     
-
+    func deletePost(with post_id: [String: Int], completion: @escaping (Error?) -> Void) {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
+            print("cannot convert to jsonData from deletePost")
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: baseURL + "deletepost")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let _ = data, error == nil else {
+                completion(error)
+                return
+            }
+            
+            completion(nil)
+        }
+        task.resume()
+    }
 
 }

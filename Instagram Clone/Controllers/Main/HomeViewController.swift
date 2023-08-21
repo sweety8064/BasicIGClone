@@ -199,7 +199,32 @@ extension HomeViewController: UICollectionViewDelegate {
 }
 
 extension HomeViewController: PostCollectionViewCellDelegate {
-    
+    func didTapOptionMenuButton(post_id: Int) {
+        
+        
+        let deletePostAction = UIAlertAction(title: "Delete Post", style: .destructive) { [weak self] action in
+            
+            let json = [
+                "post_id": post_id
+            ]
+            
+            APICaller.shared.deletePost(with: json) { [weak self] error in
+                DispatchQueue.main.async {
+                    self?.fetchPost()
+                }
+            }
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in }
+        
+        let alert = UIAlertController()
+        
+        alert.addAction(deletePostAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
+    }
     
     func didTapCommentButton(post_id: Int?) {
         
