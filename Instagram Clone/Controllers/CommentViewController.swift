@@ -90,7 +90,7 @@ class CommentViewController: UIViewController {
         setupPanGestureForHandleHeight()
         
         
-        
+        configureCollectionView()
         fetchComment()
     }
     
@@ -103,11 +103,13 @@ class CommentViewController: UIViewController {
             APICaller.shared.fetchComment(with: json) { [weak self] result in
                 switch result {
                 case .success(let model):
+                    self?.comments.removeAll()
+                    self?.viewModels.removeAll()
                     self?.comments = model
                     DispatchQueue.main.async {
-                        
+
                         self?.configureViewModels()
-                        self?.configureCollectionView()
+                        self?.collectionView.reloadData()
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -352,9 +354,11 @@ extension CommentViewController: CommentInputAccessoryViewDelegate {
                 "comment_date": Date().getFormattedTime()
             ]
             
-            APICaller.shared.addComment(with: json) { error in
+            APICaller.shared.addComment(with: json) { [weak self] error in
                 guard error == nil else { return }
                 
+                self?.fetchComment()
+
             }
         }
         

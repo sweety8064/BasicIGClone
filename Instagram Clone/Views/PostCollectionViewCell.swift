@@ -40,7 +40,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let optionMenuButton: UIButton = {
+    lazy var optionMenuButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("•••", for: .normal)
         return button
@@ -144,6 +144,8 @@ class PostCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         configureAutoLayout()
     }
+    
+
     
     @objc private func didTapLikeButton() {
         

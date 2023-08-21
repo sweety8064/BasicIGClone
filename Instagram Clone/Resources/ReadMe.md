@@ -6,6 +6,8 @@
 - fix stuck tab view
 - register keyboar
 - share photo banner should not be scroll
+- follower and folling list
+- request permissoin before access photo
 
 
 

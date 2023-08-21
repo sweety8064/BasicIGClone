@@ -114,7 +114,7 @@ class HomeViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "inbox"),
                                                            style: .plain,
                                                            target: self,
-                                                           action: #selector(didTapNBSignOut))
+                                                           action: #selector(didTapNVMenu))
         
     }
     
@@ -133,7 +133,7 @@ class HomeViewController: UIViewController {
         return section1
     }
     
-    @objc private func didTapNBSignOut() {
+    @objc private func didTapNVMenu() {
         
     }
     
@@ -199,6 +199,8 @@ extension HomeViewController: UICollectionViewDelegate {
 }
 
 extension HomeViewController: PostCollectionViewCellDelegate {
+    
+    
     func didTapCommentButton(post_id: Int?) {
         
         let vc = CommentViewController()
