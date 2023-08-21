@@ -28,7 +28,7 @@ class PhotoSelectorViewController: UIViewController {
         
         configureNavigationBar()
         fetchLocalPhotos()
-        configureCollectionView()
+        
     }
     
     private func configureNavigationBar() {
@@ -59,6 +59,7 @@ class PhotoSelectorViewController: UIViewController {
     }
     
     func configureCollectionView() {
+        
         view.addSubview(collectionView)
         collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "photoCell")
         collectionView.register(HeaderCollectionViewCell.self,
@@ -106,36 +107,48 @@ class PhotoSelectorViewController: UIViewController {
     }
     
     func fetchLocalPhotos() {
-
-        //==================== init fetchOptions ===================
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        //=========================================================
-        let fetchPhotoResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        
-        for i in 0..<fetchPhotoResult.count {
-            let asset = fetchPhotoResult.object(at: i)
-            let options = PHImageRequestOptions()
-            options.isSynchronous = true // to prevent duplicate photo
-            
-            // Request the image representation for the asset
-            PHImageManager.default().requestImage(for: asset,
-                                                  targetSize: CGSize(width: 200, height: 200),
-                                                  contentMode: .aspectFit,
-                                                  options: options) { [weak self] image, info in
-                if let image = image {
-                    self?.allPhoto.append(image)
-                    self?.allAsset.append(fetchPhotoResult[i])
-                    if self?.selectedImage == nil {   // render first photo for header
-                        self?.selectedImage = image
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
+            switch status {
+            case .authorized:
+                //==================== init fetchOptions ===================
+                let fetchOptions = PHFetchOptions()
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                
+                //=========================================================
+                let fetchPhotoResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+                
+                for i in 0..<fetchPhotoResult.count {
+                    let asset = fetchPhotoResult.object(at: i)
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true // to prevent duplicate photo
+                    
+                    // Request the image representation for the asset
+                    PHImageManager.default().requestImage(for: asset,
+                                                          targetSize: CGSize(width: 200, height: 200),
+                                                          contentMode: .aspectFit,
+                                                          options: options) { [weak self] image, info in
+                        if let image = image {
+                            self?.allPhoto.append(image)
+                            self?.allAsset.append(fetchPhotoResult[i])
+                            if self?.selectedImage == nil {   // render first photo for header
+                                self?.selectedImage = image
+                            }
+                        }
+                        
+                        
                     }
+                    
                 }
-                
-                
+                DispatchQueue.main.async {
+                    self?.configureCollectionView()
+                }
+            default:
+                print("access photo denied")
             }
-            
         }
+
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -181,6 +194,7 @@ extension PhotoSelectorViewController: UICollectionViewDataSource {
         ) as? HeaderCollectionViewCell else { return UICollectionViewCell() }
         
         let index = allPhoto.firstIndex(of: selectedImage!)!
+        
         let selectedAsset = allAsset[index]
     
         PHImageManager.default().requestImage(for: selectedAsset,
