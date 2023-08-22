@@ -134,6 +134,7 @@ class ProfileViewController: UIViewController {
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshPost), for: .valueChanged)
         return refreshControl
     }()
     
@@ -202,6 +203,13 @@ class ProfileViewController: UIViewController {
         return nil
     }
     
+    @objc private func refreshPost() {
+        xlViewController.fetchPost()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.refreshControl.endRefreshing()
+            isRefreshing = false
+        }
+    }
     
     
     
@@ -456,8 +464,16 @@ class ProfileViewController: UIViewController {
     var lastContentOffset: CGFloat  = 0
 }
 
+var isRefreshing = false
+
 extension ProfileViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) { //underlayScrollView 1400 1800
+        
+        if scrollView.contentOffset.y <= -133 && !isRefreshing {
+            isRefreshing = true
+            refreshControl.beginRefreshing()
+            refreshControl.sendActions(for: .valueChanged)
+        }
         
         self.containerScrollView.contentOffset.y = scrollView.contentOffset.y
 

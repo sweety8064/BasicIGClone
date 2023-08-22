@@ -44,6 +44,26 @@ class XLViewController: ButtonBarPagerTabStripViewController {
         }
     }
     
+    func fetchPost() {
+        self.fetchPost() { [unowned self] posts in
+            
+            self.posts.removeAll()
+            self.viewModels.removeAll()
+            self.posts = posts
+            self.configureViewModels()
+            
+            for viewController in self.viewControllers {
+                DispatchQueue.main.async {
+                    if let collectionView = viewController.view.subviews.first(where: { $0 is UICollectionView }) as? UICollectionView {
+                        
+                            collectionView.reloadData()
+                        }
+                }
+                
+            }
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

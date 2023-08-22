@@ -17,7 +17,6 @@ protocol ListViewControllerDataSource: AnyObject {
 class ListViewController: UIViewController {
     
     
-    
     weak var dataSource: GridListViewControllerDataSource?
     
     lazy var collectionView = UICollectionView(
@@ -69,6 +68,9 @@ extension ListViewController: UICollectionViewDataSource {
         
         if let dataSource = dataSource {
             cell.configure(with: dataSource.fetchProfilePost()[indexPath.row])
+            cell.userPostImageView.sd_setImage(with: URL(string: dataSource.fetchProfilePost()[indexPath.row].post_image_url))
+            cell.userProfileView.sd_setImage(with: URL(string:  dataSource.fetchProfilePost()[indexPath.row].user_image_url))
+            
         }
         
         return cell
