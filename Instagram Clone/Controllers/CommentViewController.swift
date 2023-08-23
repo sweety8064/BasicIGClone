@@ -71,6 +71,7 @@ class CommentViewController: UIViewController {
     var comments = [Comment]()
     var viewModels = [CommentViewModel]()
     
+    //MARK: - UIViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -92,6 +93,14 @@ class CommentViewController: UIViewController {
         
         configureCollectionView()
         fetchComment()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.becomeFirstResponder() // important
+        self.commentTextView.placeHolderTextView.becomeFirstResponder()
+        animatePresentContainer()
+        
     }
     
     private func fetchComment() {
@@ -157,13 +166,7 @@ class CommentViewController: UIViewController {
         animateDismissView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.becomeFirstResponder() // important
-        self.commentTextView.placeHolderTextView.becomeFirstResponder()
-        animatePresentContainer()
-        
-    }
+    
     
     private func setupTapGestureForClosing() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleCloseAction))
@@ -219,10 +222,6 @@ class CommentViewController: UIViewController {
         
         
        
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
     
     func setupPanGestureForHandleHeight() {

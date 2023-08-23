@@ -465,5 +465,59 @@ struct APICaller {
         }
         task.resume()
     }
+    
+    func fetchFollower(with post_id: [String: String], completion: @escaping (Result<[InstagramUser], Error>) -> Void) {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
+            print("cannot convert to jsonData from fetchFollower")
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: baseURL + "fetchfollower")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([InstagramUser].self, from: data)
+                completion(.success(result))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchFollowing(with post_id: [String: String], completion: @escaping (Result<[InstagramUser], Error>) -> Void) {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
+            print("cannot convert to jsonData from fetchFollower")
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: baseURL + "fetchfollowing")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([InstagramUser].self, from: data)
+                completion(.success(result))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
 
 }

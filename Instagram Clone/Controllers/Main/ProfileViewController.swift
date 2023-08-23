@@ -57,26 +57,29 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    lazy var followerCountLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.textAlignment = .center
-        label.attributedText = formatedString(with: followerCount, type: .follower)
-        return label
+    lazy var followerCountButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.numberOfLines = 2
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(self, action: #selector(didTapFollowerCountButton), for: .touchUpInside)
+        button.setAttributedTitle(formatedString(with: followerCount, type: .follower), for: .normal)
+        return button
     }()
     
-    lazy var followingCountLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.textAlignment = .center
-        label.attributedText = formatedString(with: followingCount, type: .following)
-        return label
+    lazy var followingCountButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.numberOfLines = 2
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(self, action: #selector(didTapFollowingCountButton), for: .touchUpInside)
+        button.setAttributedTitle(formatedString(with: followingCount, type: .following), for: .normal)
+        return button
     }()
     
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(
-            arrangedSubviews: [postCountLabel, followerCountLabel, followingCountLabel]
+            arrangedSubviews: [postCountLabel, followerCountButton, followingCountButton]
         )
+        stackView.distribution = .fillEqually
         return stackView
     }()
     
@@ -123,12 +126,12 @@ class ProfileViewController: UIViewController {
     }
     var followerCount = 0 {
         didSet {
-            followerCountLabel.attributedText = formatedString(with: followerCount, type: .follower)
+            followerCountButton.setAttributedTitle(formatedString(with: followerCount, type: .follower), for: .normal)
         }
     }
     var followingCount = 0 {
         didSet {
-            followingCountLabel.attributedText = formatedString(with: followingCount, type: .following)
+            followingCountButton.setAttributedTitle(formatedString(with: followingCount, type: .following), for: .normal)
         }
     }
     
@@ -171,6 +174,24 @@ class ProfileViewController: UIViewController {
         configureAutoLayout()
         
         xlViewController.xlDelegate = self // xlViewController will first init at here
+    }
+    
+    @objc private func didTapFollowerCountButton() {
+        let followersListVC = FollowersListViewController(navigationBarTitle: "Followers")
+        followersListVC.currentContainerHeight = 500
+        followersListVC.userUID = currentIGUser?.user_uuid
+        followersListVC.viewType = .follower
+        followersListVC.modalPresentationStyle = .overFullScreen
+        present(followersListVC, animated: false)
+    }
+    
+    @objc private func didTapFollowingCountButton() {
+        let followersListVC = FollowersListViewController(navigationBarTitle: "Following")
+        followersListVC.currentContainerHeight = 500
+        followersListVC.userUID = currentIGUser?.user_uuid
+        followersListVC.viewType = .following
+        followersListVC.modalPresentationStyle = .overFullScreen
+        present(followersListVC, animated: false)
     }
     
     private func updateUnderlaySVContentSize() {
@@ -231,7 +252,6 @@ class ProfileViewController: UIViewController {
                     self?.postCount = follows.total_post
                     self?.followerCount = follows.follower_uuid.count
                     self?.followingCount = follows.following_uuid.count
-                    
                     if igUserUid != sessionUserUid {
                         self?.handleButtonStyle(with: follows)
                     }

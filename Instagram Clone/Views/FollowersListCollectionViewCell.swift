@@ -1,14 +1,13 @@
 //
-//  SearchCollectionViewCell.swift
+//  FollowersListCollectionViewCell.swift
 //  Instagram Clone
 //
-//  Created by Sweety on 03/07/2023.
+//  Created by Sweety on 23/08/2023.
 //
 
 import UIKit
 
-class SearchCollectionViewCell: UICollectionViewCell {
-    
+class FollowersListCollectionViewCell: UICollectionViewCell {
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "user")

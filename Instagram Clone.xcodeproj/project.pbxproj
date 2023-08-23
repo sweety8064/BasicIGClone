@@ -46,6 +46,9 @@
 		C39D770C2A678B3300D6C7C2 /* FollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39D770B2A678B3300D6C7C2 /* FollowViewModel.swift */; };
 		C3A07BE22A0E02C6000E632D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A07BE12A0E02C6000E632D /* Extensions.swift */; };
 		C3A205992A5FC3ED00A4A132 /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A205982A5FC3ED00A4A132 /* Follow.swift */; };
+		C3A374742A95AB7B003E18CE /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A374732A95AB7B003E18CE /* BottomSheetViewController.swift */; };
+		C3A374762A95AFEE003E18CE /* FollowersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A374752A95AFEE003E18CE /* FollowersListViewController.swift */; };
+		C3A374782A95CB4E003E18CE /* FollowersListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A374772A95CB4E003E18CE /* FollowersListCollectionViewCell.swift */; };
 		C3AE2D9C2A8F225C00E6527E /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE2D9B2A8F225C00E6527E /* Comment.swift */; };
 		C3AE2D9E2A8F46F600E6527E /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE2D9D2A8F46F600E6527E /* CommentViewModel.swift */; };
 		C3AEDB822A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AEDB812A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift */; };
@@ -100,6 +103,9 @@
 		C39D770B2A678B3300D6C7C2 /* FollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewModel.swift; sourceTree = "<group>"; };
 		C3A07BE12A0E02C6000E632D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C3A205982A5FC3ED00A4A132 /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
+		C3A374732A95AB7B003E18CE /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		C3A374752A95AFEE003E18CE /* FollowersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersListViewController.swift; sourceTree = "<group>"; };
+		C3A374772A95CB4E003E18CE /* FollowersListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersListCollectionViewCell.swift; sourceTree = "<group>"; };
 		C3AE2D9B2A8F225C00E6527E /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		C3AE2D9D2A8F46F600E6527E /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C3AEDB812A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorViewController.swift; sourceTree = "<group>"; };
@@ -185,14 +191,19 @@
 		C39C67AD2A0C94D200737B2C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C39C679D2A0C8C7200737B2C /* MainTabBarController.swift */,
+				C39C67B22A0C94F400737B2C /* Main */,
 				C39C16CF2A20533E00BC5F78 /* SharePhotoViewController.swift */,
 				C39C67B62A0C97B300737B2C /* LoginViewController.swift */,
 				C3AF20402A15C6A800926507 /* RegisterViewController.swift */,
 				C3AEDB812A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift */,
-				C39C67B22A0C94F400737B2C /* Main */,
+				C3A374732A95AB7B003E18CE /* BottomSheetViewController.swift */,
 				C38DBD442A6512A800EEF509 /* TestController.swift */,
 				C379D7B62A78DC1C00602023 /* xlViewController.swift */,
 				C3E7E7CA2A8A611500DA3E45 /* CommentViewController.swift */,
+				C38DBD422A64F28D00EEF509 /* ListViewController.swift */,
+				C38DBD402A64F27F00EEF509 /* GridViewController.swift */,
+				C3A374752A95AFEE003E18CE /* FollowersListViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -217,6 +228,7 @@
 				C38AAAF42A1C69DE00880815 /* PhotoCollectionViewCell.swift */,
 				C33620442A2D85B2008F80DE /* PostCollectionViewCell.swift */,
 				C38AAAF62A1C821C00880815 /* HeaderCollectionViewCell.swift */,
+				C3A374772A95CB4E003E18CE /* FollowersListCollectionViewCell.swift */,
 				C36AEC452A5279DD00926E60 /* SearchCollectionViewCell.swift */,
 				C39D77072A6784FA00D6C7C2 /* ProfileHeaderCollectionViewCell.swift */,
 				C39D77092A67879600D6C7C2 /* GridViewCollectionViewCell.swift */,
@@ -249,14 +261,11 @@
 		C39C67B22A0C94F400737B2C /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				C39C679D2A0C8C7200737B2C /* MainTabBarController.swift */,
 				C39B04802A147047009962C0 /* HomeViewController.swift */,
 				C39B04822A147050009962C0 /* SearchViewController.swift */,
 				C39B04842A147069009962C0 /* AddPhotoViewController.swift */,
 				C39B04862A147075009962C0 /* LikeViewController.swift */,
 				C39B04882A147080009962C0 /* ProfileViewController.swift */,
-				C38DBD402A64F27F00EEF509 /* GridViewController.swift */,
-				C38DBD422A64F28D00EEF509 /* ListViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -391,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3A374782A95CB4E003E18CE /* FollowersListCollectionViewCell.swift in Sources */,
 				C39C16D02A20533E00BC5F78 /* SharePhotoViewController.swift in Sources */,
 				C3A07BE22A0E02C6000E632D /* Extensions.swift in Sources */,
 				C38DBD432A64F28D00EEF509 /* ListViewController.swift in Sources */,
@@ -423,9 +433,11 @@
 				C39D770C2A678B3300D6C7C2 /* FollowViewModel.swift in Sources */,
 				C33620452A2D85B2008F80DE /* PostCollectionViewCell.swift in Sources */,
 				C3992A5F2A416C2700A8FE7D /* toLike.swift in Sources */,
+				C3A374742A95AB7B003E18CE /* BottomSheetViewController.swift in Sources */,
 				C3682A562A317C97002B75E1 /* PostViewModel.swift in Sources */,
 				C386D08A2A209F85002705B8 /* APICaller.swift in Sources */,
 				C386D08C2A20A448002705B8 /* toPost.swift in Sources */,
+				C3A374762A95AFEE003E18CE /* FollowersListViewController.swift in Sources */,
 				C3F2F3DA2A4D365700AEC28D /* InstagramUser.swift in Sources */,
 				C38DBD412A64F27F00EEF509 /* GridViewController.swift in Sources */,
 				C39C679C2A0C8C7200737B2C /* SceneDelegate.swift in Sources */,
