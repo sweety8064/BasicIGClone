@@ -84,13 +84,13 @@ class ProfileViewController: UIViewController {
     }()
     
     let editProfileButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton()
         button.setTitle("Edit Profile", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 14)
         button.setTitleColor(.black, for: .normal)
         button.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
         button.layer.borderWidth = 1
-        button.layer.cornerRadius = 3
+        button.layer.cornerRadius = 32 / 4 // 8 radius
         return button
     }()
     
@@ -179,7 +179,7 @@ class ProfileViewController: UIViewController {
     @objc private func didTapFollowerCountButton() {
         let followersListVC = FollowersListViewController(navigationBarTitle: "Followers")
         followersListVC.currentContainerHeight = 500
-        followersListVC.userUID = currentIGUser?.user_uuid
+        followersListVC.currentIGUser = currentIGUser?.user_uuid
         followersListVC.viewType = .follower
         followersListVC.modalPresentationStyle = .overFullScreen
         present(followersListVC, animated: false)
@@ -188,43 +188,16 @@ class ProfileViewController: UIViewController {
     @objc private func didTapFollowingCountButton() {
         let followersListVC = FollowersListViewController(navigationBarTitle: "Following")
         followersListVC.currentContainerHeight = 500
-        followersListVC.userUID = currentIGUser?.user_uuid
+        followersListVC.currentIGUser = currentIGUser?.user_uuid
         followersListVC.viewType = .following
         followersListVC.modalPresentationStyle = .overFullScreen
         present(followersListVC, animated: false)
     }
     
-    private func updateUnderlaySVContentSize() {
-        
-        guard let nearestScrollView = getNearestScrollViewInSubView() else { fatalError() }
-        let buttonBarViewHeight = xlViewController.buttonBarView.frame.height
-        
-        underlayScrollView.contentSize.height = max(headerView.frame.height + nearestScrollView.contentSize.height + buttonBarViewHeight, view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom + headerView.frame.height)
-        
-        
-    }
     
-    private func getNearestScrollViewInSubView(forIndex: Int? = nil) -> UIScrollView? {
-        
-        let index: Int?
-        
-        if let forIndex = forIndex {
-            index = forIndex
-        } else {
-            index = self.xlViewController.currentIndex
-        }
-        
-        
-        if let scrollView = self.xlViewController.viewControllers[index!].view.subviews.first(where: {$0 is UIScrollView}) as? UIScrollView{
-            
-            return scrollView
-            
-        }
-        
-        return nil
-    }
     
     @objc private func refreshPost() {
+        fetchUserProfile()
         xlViewController.fetchPost()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.refreshControl.endRefreshing()
@@ -335,20 +308,15 @@ class ProfileViewController: UIViewController {
 
         editProfileButton.anchor(top: stackView.bottomAnchor,
                                  leading: profileImageView.trailingAnchor,
-                                 bottom: profileImageView.bottomAnchor,
                                  trailing: headerView.trailingAnchor,
-                                 leadingConstant: 12, TrailingConstant: -12)
-
+                                 leadingConstant: 12, TrailingConstant: -12,
+                                 height: 32)
 
         separateLine.anchor(top: profileImageView.bottomAnchor,
                                leading: headerView.leadingAnchor,
                                trailing: headerView.trailingAnchor,
                                topConstant: 20, height: 0.5)
 
-        
-        
-        
-        
     }
 
     
@@ -457,19 +425,19 @@ class ProfileViewController: UIViewController {
         case .post:
             attributeText.append(NSAttributedString(
                 string: "post",
-                attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray,
                              NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
             )
         case .follower:
             attributeText.append(NSAttributedString(
                 string: "followers",
-                attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray,
                              NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
             )
         case .following:
             attributeText.append(NSAttributedString(
                 string: "followings",
-                attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray,
                              NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
             )
         }
@@ -489,11 +457,13 @@ var isRefreshing = false
 extension ProfileViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) { //underlayScrollView 1400 1800
         
+        //========================== handle UIRefreshControl ====================
         if scrollView.contentOffset.y <= -133 && !isRefreshing {
             isRefreshing = true
             refreshControl.beginRefreshing()
             refreshControl.sendActions(for: .valueChanged)
         }
+        //=========================== implement scroll logic ====================================
         
         self.containerScrollView.contentOffset.y = scrollView.contentOffset.y
 
@@ -515,6 +485,39 @@ extension ProfileViewController: UIScrollViewDelegate {
         //======================================================================================
         
         
+    }
+}
+
+//MARK: - UIScrollView Logic
+extension ProfileViewController {
+    private func updateUnderlaySVContentSize() {
+        
+        guard let nearestScrollView = getNearestScrollViewInSubView() else { fatalError() }
+        let buttonBarViewHeight = xlViewController.buttonBarView.frame.height
+        
+        underlayScrollView.contentSize.height = max(headerView.frame.height + nearestScrollView.contentSize.height + buttonBarViewHeight, view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom + headerView.frame.height)
+        
+        
+    }
+    
+    private func getNearestScrollViewInSubView(forIndex: Int? = nil) -> UIScrollView? {
+        
+        let index: Int?
+        
+        if let forIndex = forIndex {
+            index = forIndex
+        } else {
+            index = self.xlViewController.currentIndex
+        }
+        
+        
+        if let scrollView = self.xlViewController.viewControllers[index!].view.subviews.first(where: {$0 is UIScrollView}) as? UIScrollView{
+            
+            return scrollView
+            
+        }
+        
+        return nil
     }
 }
 

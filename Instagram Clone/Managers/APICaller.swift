@@ -466,7 +466,7 @@ struct APICaller {
         task.resume()
     }
     
-    func fetchFollower(with post_id: [String: String], completion: @escaping (Result<[InstagramUser], Error>) -> Void) {
+    func fetchFollower(with post_id: [String: String], completion: @escaping (Result<[InstagramUserFollow], Error>) -> Void) {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
             print("cannot convert to jsonData from fetchFollower")
             return
@@ -484,7 +484,7 @@ struct APICaller {
             }
             
             do {
-                let result = try JSONDecoder().decode([InstagramUser].self, from: data)
+                let result = try JSONDecoder().decode([InstagramUserFollow].self, from: data)
                 completion(.success(result))
             } catch {
                 completion(.failure(error))
@@ -493,7 +493,7 @@ struct APICaller {
         task.resume()
     }
     
-    func fetchFollowing(with post_id: [String: String], completion: @escaping (Result<[InstagramUser], Error>) -> Void) {
+    func fetchFollowing(with post_id: [String: String], completion: @escaping (Result<[InstagramUserFollow], Error>) -> Void) {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
             print("cannot convert to jsonData from fetchFollower")
             return
@@ -511,7 +511,7 @@ struct APICaller {
             }
             
             do {
-                let result = try JSONDecoder().decode([InstagramUser].self, from: data)
+                let result = try JSONDecoder().decode([InstagramUserFollow].self, from: data)
                 completion(.success(result))
             } catch {
                 completion(.failure(error))

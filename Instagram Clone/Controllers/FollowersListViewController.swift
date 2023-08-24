@@ -18,10 +18,10 @@ class FollowersListViewController: BottomSheetViewController {
         }
     )
     
-    var userUID: String?
+    var currentIGUser: String?
     
-    var users = [InstagramUser]()
-    var viewModels = [InstagramUserViewModel]()
+    var users = [InstagramUserFollow]()
+    var viewModels = [IGUserFollowViewModel]()
     
     enum Types {
         case follower, following
@@ -29,13 +29,20 @@ class FollowersListViewController: BottomSheetViewController {
     
     var viewType: Types?
     
+    var sessionUserUID: String? {
+        return SessionManager.shared.getUser()?.user_uuid
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let userUID = userUID, let viewType = viewType {
+        if let userUID = currentIGUser,
+           let viewType = viewType,
+           let sessoinUserUID = SessionManager.shared.getUser() {
             
             let json = [
-                "user_uuid": userUID
+                "user_uuid": userUID,
+                "session_user_uuid": sessoinUserUID.user_uuid
             ]
             
             switch viewType {
@@ -75,8 +82,11 @@ class FollowersListViewController: BottomSheetViewController {
     
     func configureViewModels() {
         for user in users {
-            viewModels.append(InstagramUserViewModel(name: user.name,
-                                                     profile_image_url: user.profile_image_url))
+            viewModels.append(IGUserFollowViewModel(user_uuid: user.user_uuid,
+                                                    name: user.name,
+                                                    profile_image_url: user.profile_image_url,
+                                                    is_following_back: user.is_following_back)
+            )
         }
         
     }
@@ -85,7 +95,7 @@ class FollowersListViewController: BottomSheetViewController {
         collectionView.isScrollEnabled = false
         view.addSubview(collectionView)
         collectionView.anchor(top: grabberViewArea.bottomAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor)
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(IGUserListCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -106,12 +116,13 @@ class FollowersListViewController: BottomSheetViewController {
 extension FollowersListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? SearchCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? IGUserListCollectionViewCell else {
             return UICollectionViewCell()
         }
         
+        cell.sessionUserUID = self.sessionUserUID
         cell.configure(with: viewModels[indexPath.row])
-        cell.profileImageView.sd_setImage(with: URL(string: viewModels[indexPath.row].profile_image_url))
+        
         
         return cell
         

@@ -41,7 +41,6 @@
 		C39C67B52A0C96FC00737B2C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C39C67B42A0C96FC00737B2C /* GoogleService-Info.plist */; };
 		C39C67B72A0C97B300737B2C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39C67B62A0C97B300737B2C /* LoginViewController.swift */; };
 		C39D32312A5517EF00541F46 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39D32302A5517EF00541F46 /* ProfileViewModel.swift */; };
-		C39D77082A6784FA00D6C7C2 /* ProfileHeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39D77072A6784FA00D6C7C2 /* ProfileHeaderCollectionViewCell.swift */; };
 		C39D770A2A67879600D6C7C2 /* GridViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39D77092A67879600D6C7C2 /* GridViewCollectionViewCell.swift */; };
 		C39D770C2A678B3300D6C7C2 /* FollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39D770B2A678B3300D6C7C2 /* FollowViewModel.swift */; };
 		C3A07BE22A0E02C6000E632D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A07BE12A0E02C6000E632D /* Extensions.swift */; };
@@ -53,6 +52,9 @@
 		C3AE2D9E2A8F46F600E6527E /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE2D9D2A8F46F600E6527E /* CommentViewModel.swift */; };
 		C3AEDB822A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AEDB812A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift */; };
 		C3AF20412A15C6A800926507 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AF20402A15C6A800926507 /* RegisterViewController.swift */; };
+		C3C328532A96F74000B990F4 /* IGUserListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C328522A96F74000B990F4 /* IGUserListCollectionViewCell.swift */; };
+		C3C328552A96FC8900B990F4 /* InstagramUserFollow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C328542A96FC8900B990F4 /* InstagramUserFollow.swift */; };
+		C3C328572A9701B600B990F4 /* IGUserFollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C328562A9701B600B990F4 /* IGUserFollowViewModel.swift */; };
 		C3E7E7C92A8A58A000DA3E45 /* GrabberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E7E7C82A8A58A000DA3E45 /* GrabberView.swift */; };
 		C3E7E7CB2A8A611500DA3E45 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E7E7CA2A8A611500DA3E45 /* CommentViewController.swift */; };
 		C3F2F3DA2A4D365700AEC28D /* InstagramUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F2F3D92A4D365700AEC28D /* InstagramUser.swift */; };
@@ -98,7 +100,6 @@
 		C39C67B62A0C97B300737B2C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C39D32302A5517EF00541F46 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		C39D32322A551FA600541F46 /* ReadMe.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
-		C39D77072A6784FA00D6C7C2 /* ProfileHeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		C39D77092A67879600D6C7C2 /* GridViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridViewCollectionViewCell.swift; sourceTree = "<group>"; };
 		C39D770B2A678B3300D6C7C2 /* FollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewModel.swift; sourceTree = "<group>"; };
 		C3A07BE12A0E02C6000E632D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -110,6 +111,9 @@
 		C3AE2D9D2A8F46F600E6527E /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C3AEDB812A1B0ABE00E8AA24 /* PhotoSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorViewController.swift; sourceTree = "<group>"; };
 		C3AF20402A15C6A800926507 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		C3C328522A96F74000B990F4 /* IGUserListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGUserListCollectionViewCell.swift; sourceTree = "<group>"; };
+		C3C328542A96FC8900B990F4 /* InstagramUserFollow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramUserFollow.swift; sourceTree = "<group>"; };
+		C3C328562A9701B600B990F4 /* IGUserFollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGUserFollowViewModel.swift; sourceTree = "<group>"; };
 		C3E7E7C82A8A58A000DA3E45 /* GrabberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrabberView.swift; sourceTree = "<group>"; };
 		C3E7E7CA2A8A611500DA3E45 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		C3F2F3D92A4D365700AEC28D /* InstagramUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramUser.swift; sourceTree = "<group>"; };
@@ -212,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				C386D08B2A20A448002705B8 /* toPost.swift */,
+				C3C328542A96FC8900B990F4 /* InstagramUserFollow.swift */,
 				C3992A5E2A416C2700A8FE7D /* toLike.swift */,
 				C33620462A2DBED2008F80DE /* Post.swift */,
 				C3F2F3D92A4D365700AEC28D /* InstagramUser.swift */,
@@ -230,7 +235,7 @@
 				C38AAAF62A1C821C00880815 /* HeaderCollectionViewCell.swift */,
 				C3A374772A95CB4E003E18CE /* FollowersListCollectionViewCell.swift */,
 				C36AEC452A5279DD00926E60 /* SearchCollectionViewCell.swift */,
-				C39D77072A6784FA00D6C7C2 /* ProfileHeaderCollectionViewCell.swift */,
+				C3C328522A96F74000B990F4 /* IGUserListCollectionViewCell.swift */,
 				C39D77092A67879600D6C7C2 /* GridViewCollectionViewCell.swift */,
 				C37B4EAA2A8C93E30009167A /* CommentCollectionViewCell.swift */,
 			);
@@ -242,6 +247,7 @@
 			children = (
 				C3682A552A317C97002B75E1 /* PostViewModel.swift */,
 				C386B15C2A53C07B00C9CF8A /* InstagramUserViewModel.swift */,
+				C3C328562A9701B600B990F4 /* IGUserFollowViewModel.swift */,
 				C39D32302A5517EF00541F46 /* ProfileViewModel.swift */,
 				C39D770B2A678B3300D6C7C2 /* FollowViewModel.swift */,
 				C3AE2D9D2A8F46F600E6527E /* CommentViewModel.swift */,
@@ -415,6 +421,7 @@
 				C38076E62A384BE500994128 /* TimeConverter.swift in Sources */,
 				C3AE2D9E2A8F46F600E6527E /* CommentViewModel.swift in Sources */,
 				C3E7E7C92A8A58A000DA3E45 /* GrabberView.swift in Sources */,
+				C3C328532A96F74000B990F4 /* IGUserListCollectionViewCell.swift in Sources */,
 				C39B04852A147069009962C0 /* AddPhotoViewController.swift in Sources */,
 				C37B4EAB2A8C93E30009167A /* CommentCollectionViewCell.swift in Sources */,
 				C39B04892A147080009962C0 /* ProfileViewController.swift in Sources */,
@@ -441,10 +448,11 @@
 				C3F2F3DA2A4D365700AEC28D /* InstagramUser.swift in Sources */,
 				C38DBD412A64F27F00EEF509 /* GridViewController.swift in Sources */,
 				C39C679C2A0C8C7200737B2C /* SceneDelegate.swift in Sources */,
+				C3C328552A96FC8900B990F4 /* InstagramUserFollow.swift in Sources */,
 				C37B4EAD2A8C9C520009167A /* CommentTextView.swift in Sources */,
 				C39B04812A147047009962C0 /* HomeViewController.swift in Sources */,
-				C39D77082A6784FA00D6C7C2 /* ProfileHeaderCollectionViewCell.swift in Sources */,
 				C33620472A2DBED2008F80DE /* Post.swift in Sources */,
+				C3C328572A9701B600B990F4 /* IGUserFollowViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

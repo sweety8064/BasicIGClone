@@ -52,6 +52,12 @@ class BottomSheetViewController: UIViewController {
         return view
     }()
     
+    let separateLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        return view
+    }()
+    
     init(navigationBarTitle: String) {
         self.navigationBarTitle = navigationBarTitle
         super.init(nibName: nil, bundle: nil)
@@ -114,7 +120,7 @@ class BottomSheetViewController: UIViewController {
         containerViewBottomConstraint?.isActive = true
         
         // grabberViewArea
-        grabberViewArea.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, trailing: containerView.trailingAnchor, height: 69)
+        grabberViewArea.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, trailing: containerView.trailingAnchor, height: 70)
         
         grabberView.anchor(top: grabberViewArea.topAnchor,
                            leading: grabberViewArea.leadingAnchor,
@@ -132,7 +138,12 @@ class BottomSheetViewController: UIViewController {
         navigationBar.barTintColor = .white
         
         grabberViewArea.addSubview(navigationBar)
-        navigationBar.anchor(top: grabberView.bottomAnchor, leading: grabberViewArea.leadingAnchor , trailing: grabberViewArea.trailingAnchor, topConstant: 5)
+        navigationBar.anchor(top: grabberView.bottomAnchor,
+                             leading: grabberViewArea.leadingAnchor,
+                             trailing: grabberViewArea.trailingAnchor, topConstant: 5)
+        
+        
+        
     }
     
     deinit {
