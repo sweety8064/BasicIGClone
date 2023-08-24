@@ -69,6 +69,7 @@ class HomeViewController: UIViewController {
     func configureViewModels() {
         for post in posts {
             viewModels.append(PostViewModel(post_id: post.post_id,
+                                            post_user_uuid: post.post_user_uuid,
                                             poster_name: post.post_username,
                                             post_image_url: post.image_url,
                                             user_image_url: post.user_image_url,
@@ -199,8 +200,8 @@ extension HomeViewController: UICollectionViewDelegate {
 }
 
 extension HomeViewController: PostCollectionViewCellDelegate {
-    func didTapOptionMenuButton(post_id: Int) {
-        
+    func didTapOptionMenuButton(post_id: Int, post_user_uuid: String) {
+        guard let sessionUser = sessionUser else { fatalError() }
         
         let deletePostAction = UIAlertAction(title: "Delete Post", style: .destructive) { [weak self] action in
             
@@ -220,7 +221,9 @@ extension HomeViewController: PostCollectionViewCellDelegate {
         
         let alert = UIAlertController()
         
-        alert.addAction(deletePostAction)
+        if sessionUser.user_uuid == post_user_uuid { // enable delete option if owner
+            alert.addAction(deletePostAction)
+        }
         alert.addAction(cancelAction)
         
         self.present(alert, animated: true)
@@ -263,6 +266,15 @@ extension HomeViewController: PostCollectionViewCellDelegate {
 
     }
     
-    
+    func didTapLikeCounterButton(post_id: Int) {
+        
+        let followersListVC = FollowersListViewController(navigationBarTitle: "Likes")
+        followersListVC.currentContainerHeight = 500
+        followersListVC.post_id = post_id
+        followersListVC.viewType = .like
+        followersListVC.modalPresentationStyle = .overFullScreen
+        present(followersListVC, animated: false)
+        
+    }
 }
 

@@ -5,7 +5,7 @@
 - share photo banner should not be scroll
 - follower and folling list
 - profile view should able to handle like properly
-
+- prevent delete other user post
 
 
 #  learning

@@ -138,6 +138,7 @@ class XLViewController: ButtonBarPagerTabStripViewController {
     func configureViewModels() {
         for post in posts {
             viewModels.append(PostViewModel(post_id: post.post_id,
+                                            post_user_uuid: post.post_user_uuid,
                                             poster_name: post.post_username,
                                             post_image_url: post.image_url,
                                             user_image_url: post.user_image_url,

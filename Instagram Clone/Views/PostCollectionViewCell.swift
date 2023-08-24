@@ -10,7 +10,9 @@ import UIKit
 protocol PostCollectionViewCellDelegate: AnyObject {
     func didTapLikeButton(for cell: PostCollectionViewCell)
     func didTapCommentButton(post_id: Int?)
-    func didTapOptionMenuButton(post_id: Int)
+    func didTapOptionMenuButton(post_id: Int, post_user_uuid: String)
+    func didTapLikeCounterButton(post_id: Int)
+    
 }
 
 class PostCollectionViewCell: UICollectionViewCell {
@@ -18,6 +20,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     weak var delegate: PostCollectionViewCellDelegate?
     
     var post_id: Int?
+    var post_user_uuid: String?
     
     let postHeaderContainer: UIView = {
         let container = UIView()
@@ -88,11 +91,13 @@ class PostCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    lazy var likeCounterLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 14)
-        label.text = "\(likeCount) Like"
-        return label
+    lazy var likeCounterButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = .boldSystemFont(ofSize: 14)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitle("\(likeCount) Like", for: .normal)
+        button.addTarget(self, action: #selector(didTapLikeCounterButton), for: .touchUpInside)
+        return button
     }()
     
     let postCaptionLabel: UILabel = {
@@ -119,8 +124,12 @@ class PostCollectionViewCell: UICollectionViewCell {
     }
     var likeCount: Int = 0 {
         didSet {
-            likeCounterLabel.text = "\(likeCount) Like"
+            likeCounterButton.setTitle("\(likeCount) Like", for: .normal)
         }
+    }
+    
+    var sessionUserUID: String? {
+        return SessionManager.shared.getUser()?.user_uuid
     }
     
     
@@ -134,7 +143,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(userPostImageView)
         contentView.addSubview(stackView)
         contentView.addSubview(bookmarkButton)
-        contentView.addSubview(likeCounterLabel)
+        contentView.addSubview(likeCounterButton)
         contentView.addSubview(postCaptionLabel)
         contentView.addSubview(timeAgoLabel)
         
@@ -154,7 +163,17 @@ class PostCollectionViewCell: UICollectionViewCell {
             return
         }
         
-        delegate?.didTapOptionMenuButton(post_id: post_id)
+        if let post_user_uuid = self.post_user_uuid {
+            delegate?.didTapOptionMenuButton(post_id: post_id, post_user_uuid: post_user_uuid)
+        }
+        
+        
+    }
+    
+    @objc private func didTapLikeCounterButton() {
+        if let post_id = post_id {
+            delegate?.didTapLikeCounterButton(post_id: post_id)
+        }
     }
     
     @objc private func didTapLikeButton() {
@@ -176,7 +195,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     
     private func handleLikeCount(_ isLike: Bool) {
         likeCount = isLike ? likeCount + 1 : likeCount - 1
-        likeCounterLabel.text = "\(likeCount) like"
+        likeCounterButton.setTitle("\(likeCount) like", for: .normal)
     }
     
     private func configureAutoLayout() {
@@ -212,13 +231,13 @@ class PostCollectionViewCell: UICollectionViewCell {
                               trailing: contentView.trailingAnchor,
                               topConstant: 12,
                               TrailingConstant: -12)
-        likeCounterLabel.anchor(top: stackView.bottomAnchor,
+        likeCounterButton.anchor(top: stackView.bottomAnchor,
                            leading: contentView.leadingAnchor,
-                           topConstant: 12, leadingConstant: 12)
-        postCaptionLabel.anchor(top: likeCounterLabel.bottomAnchor,
+                           topConstant: 2, leadingConstant: 12)
+        postCaptionLabel.anchor(top: likeCounterButton.bottomAnchor,
                                 leading: contentView.leadingAnchor,
                                 trailing: contentView.trailingAnchor,
-                                topConstant: 6, leadingConstant: 12, TrailingConstant: -12)
+                                leadingConstant: 12, TrailingConstant: -12)
         timeAgoLabel.anchor(top: postCaptionLabel.bottomAnchor,
                               leading: contentView.leadingAnchor,
                               topConstant: 6, leadingConstant: 12)
@@ -227,6 +246,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     
     func configure(with post: PostViewModel) {
         self.post_id = post.post_id
+        self.post_user_uuid = post.post_user_uuid
         userNameLabel.text = post.poster_name
         userProfileView.image = post.userImage
         userPostImageView.image = post.postImage

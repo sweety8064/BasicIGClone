@@ -11,6 +11,7 @@ import UIKit
 
 class PostViewModel {
     let post_id: Int
+    let post_user_uuid: String
     let poster_name: String
     var post_image_url: String
     var user_image_url: String
@@ -32,8 +33,9 @@ class PostViewModel {
         return formatPostDate()
     }
     
-    init(post_id: Int, poster_name: String, post_image_url: String, user_image_url: String, total_like: Int, caption: String, post_date_utc0: String, user_islike: Bool) {
+    init(post_id: Int, post_user_uuid: String, poster_name: String, post_image_url: String, user_image_url: String, total_like: Int, caption: String, post_date_utc0: String, user_islike: Bool) {
         self.post_id = post_id
+        self.post_user_uuid = post_user_uuid
         self.poster_name = poster_name
         self.post_image_url = post_image_url
         self.user_image_url = user_image_url

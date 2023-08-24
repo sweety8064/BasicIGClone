@@ -24,7 +24,7 @@ class FollowersListViewController: BottomSheetViewController {
     var viewModels = [IGUserFollowViewModel]()
     
     enum Types {
-        case follower, following
+        case follower, following, like
     }
     
     var viewType: Types?
@@ -33,20 +33,22 @@ class FollowersListViewController: BottomSheetViewController {
         return SessionManager.shared.getUser()?.user_uuid
     }
     
+    var post_id: Int?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let userUID = currentIGUser,
-           let viewType = viewType,
-           let sessoinUserUID = SessionManager.shared.getUser() {
+        if let viewType = viewType,
+           let sessionUser = SessionManager.shared.getUser() {
             
-            let json = [
-                "user_uuid": userUID,
-                "session_user_uuid": sessoinUserUID.user_uuid
-            ]
-            
+
             switch viewType {
             case .follower:
+                guard let userUID = currentIGUser else { fatalError() }
+                let json = [
+                    "user_uuid": userUID,
+                    "session_user_uuid": sessionUser.user_uuid
+                ]
                 APICaller.shared.fetchFollower(with: json) { [weak self] result in
                     switch result {
                     case .success(let users):
@@ -60,7 +62,30 @@ class FollowersListViewController: BottomSheetViewController {
                     }
                 }
             case .following:
+                guard let userUID = currentIGUser else { fatalError() }
+                let json = [
+                    "user_uuid": userUID,
+                    "session_user_uuid": sessionUser.user_uuid
+                ]
                 APICaller.shared.fetchFollowing(with: json) { [weak self] result in
+                    switch result {
+                    case .success(let users):
+                        self?.users = users
+                        self?.configureViewModels()
+                        DispatchQueue.main.async {
+                            self?.collectionView.reloadData()
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .like:
+                guard let post_id = post_id else { fatalError() }
+                let json: [String: Any] = [
+                    "session_user_uuid": sessionUser.user_uuid,
+                    "post_id": post_id
+                ]
+                APICaller.shared.fetchUsersLikePost(with: json) { [weak self] result in
                     switch result {
                     case .success(let users):
                         self?.users = users

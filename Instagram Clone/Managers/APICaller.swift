@@ -519,5 +519,32 @@ struct APICaller {
         }
         task.resume()
     }
+    
+    func fetchUsersLikePost(with post_id: [String: Any], completion: @escaping (Result<[InstagramUserFollow], Error>) -> Void) {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: post_id) else {
+            print("cannot convert to jsonData from fetchFollower")
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: baseURL + "fetchuserslikepost")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([InstagramUserFollow].self, from: data)
+                completion(.success(result))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
 
 }

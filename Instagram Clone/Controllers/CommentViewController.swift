@@ -213,7 +213,7 @@ class CommentViewController: UIViewController {
         containerViewBottomConstraint?.isActive = true
         
         // grabberViewArea
-        grabberViewArea.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, trailing: containerView.trailingAnchor, height: 69)
+        grabberViewArea.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, trailing: containerView.trailingAnchor, height: 70)
         
         grabberView.anchor(top: grabberViewArea.topAnchor,
                            leading: grabberViewArea.leadingAnchor,
