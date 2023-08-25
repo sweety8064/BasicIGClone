@@ -11,9 +11,11 @@ import SDWebImage
 
 protocol GridListViewControllerDataSource: AnyObject {
     
-    func fetchProfilePost() -> [PostViewModel]
+    func fetchViewModelsProfilePost() -> [PostViewModel]
     
     func didFinishConfigCV()
+    
+    func fetchProfilePost()
 }
 
 class GridViewController: UIViewController {
@@ -94,7 +96,7 @@ extension GridViewController: UICollectionViewDataSource {
         }
         
         if let dataSource = dataSource,
-           let postImageUrl = URL(string: dataSource.fetchProfilePost()[indexPath.row].post_image_url) {
+           let postImageUrl = URL(string: dataSource.fetchViewModelsProfilePost()[indexPath.row].post_image_url) {
             cell.imageView.sd_setImage(with: postImageUrl)
         }
         
@@ -103,7 +105,7 @@ extension GridViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.fetchProfilePost().count ?? 0
+        return dataSource?.fetchViewModelsProfilePost().count ?? 0
     }
     
     

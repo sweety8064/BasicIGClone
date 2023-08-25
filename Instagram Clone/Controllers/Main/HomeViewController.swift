@@ -192,6 +192,7 @@ class HomeViewController: UIViewController {
 
 }
 
+//MARK: - UICollectionViewDataSource
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
@@ -248,6 +249,7 @@ extension HomeViewController: UICollectionViewDelegate {
     }
 }
 
+//MARK: - PostCollectionViewCellDelegate
 extension HomeViewController: PostCollectionViewCellDelegate {
     func didTapOptionMenuButton(post_id: Int, post_user_uuid: String) {
         guard let sessionUser = sessionUser else { fatalError() }

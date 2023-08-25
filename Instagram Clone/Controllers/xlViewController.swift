@@ -41,10 +41,12 @@ class XLViewController: ButtonBarPagerTabStripViewController {
             self?.posts = posts
             self?.configureViewModels()
             self?.xlDelegate?.didFetchPost()
+            
         }
     }
     
     func fetchPost() {
+        
         self.fetchPost() { [unowned self] posts in
             
             self.posts.removeAll()
@@ -52,14 +54,18 @@ class XLViewController: ButtonBarPagerTabStripViewController {
             self.posts = posts
             self.configureViewModels()
             
-            for viewController in self.viewControllers {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                for viewController in self.viewControllers {
+                    
                     if let collectionView = viewController.view.subviews.first(where: { $0 is UICollectionView }) as? UICollectionView {
                         
-                            collectionView.reloadData()
-                        }
+                        collectionView.reloadData()
+                        collectionView.layoutIfNeeded()
+                    }
+                    
+                    
                 }
-                
+                self.didFinishConfigCV()
             }
         }
     }
@@ -97,7 +103,7 @@ class XLViewController: ButtonBarPagerTabStripViewController {
 
     
     private func setupMenuIndicator() {
-        changeCurrentIndexProgressive = { [weak self] oldCell, newCell, progressPercentage, changeCurrentIndex, animated in
+        changeCurrentIndexProgressive = { oldCell, newCell, progressPercentage, changeCurrentIndex, animated in
             
             guard changeCurrentIndex == true else { return }
             newCell?.imageView.tintColor = .black
@@ -106,7 +112,7 @@ class XLViewController: ButtonBarPagerTabStripViewController {
     }
 
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
-        
+
         let gridVC = GridViewController()
         gridVC.dataSource = self
         let listVC = ListViewController()
@@ -155,15 +161,19 @@ class XLViewController: ButtonBarPagerTabStripViewController {
 
 extension XLViewController: GridListViewControllerDataSource {
         
-    func fetchProfilePost() -> [PostViewModel] {
-        self.xlDelegate?.didFetchPost() // for updateUnderlaySVContentSize()
+    func fetchViewModelsProfilePost() -> [PostViewModel] {
         return self.viewModels
     }
     
 
-    func didFinishConfigCV() {
-        
+    func didFinishConfigCV() {  // updateUnderlaySVContentSize()
         xlDelegate?.didFinishConfigCV()
     }
+    
+    func fetchProfilePost() {
+        self.fetchPost()
+    }
+    
+    
     
 }

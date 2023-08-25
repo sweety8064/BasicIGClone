@@ -19,7 +19,7 @@ class RegisterViewController: UIViewController {
         return uiView
     }()
     
-    let selectPhotoButton: UIButton = {
+    lazy var selectPhotoButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleToFill
         button.setImage(UIImage(named: "plus_photo"), for: .normal)

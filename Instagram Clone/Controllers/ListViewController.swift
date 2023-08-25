@@ -8,16 +8,16 @@
 import UIKit
 import XLPagerTabStrip
 
-protocol ListViewControllerDataSource: AnyObject {
-    func initProfilePost(completion: @escaping () -> Void)
-    
-    func fetchProfilePost() -> [Post]
-}
-
 class ListViewController: UIViewController {
     
     
     weak var dataSource: GridListViewControllerDataSource?
+    var viewModels: [PostViewModel] { // for manipulate data
+        return dataSource!.fetchViewModelsProfilePost()
+    }
+    var sessionUser: InstagramUser? {
+        return SessionManager.shared.getUser()
+    }
     
     lazy var collectionView = UICollectionView(
         frame: .zero,
@@ -54,6 +54,12 @@ class ListViewController: UIViewController {
         configureCollectionView()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        dataSource?.didFinishConfigCV()
+    }
+    
 
 
 }
@@ -64,21 +70,19 @@ extension ListViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? PostCollectionViewCell else {
             return UICollectionViewCell()
         }
-
         
-        if let dataSource = dataSource {
-            cell.configure(with: dataSource.fetchProfilePost()[indexPath.row])
-            cell.userPostImageView.sd_setImage(with: URL(string: dataSource.fetchProfilePost()[indexPath.row].post_image_url))
-            cell.userProfileView.sd_setImage(with: URL(string:  dataSource.fetchProfilePost()[indexPath.row].user_image_url))
-            
-        }
+        cell.delegate = self
+        cell.configure(with: viewModels[indexPath.row])
+        
+        cell.userPostImageView.sd_setImage(with: URL(string: viewModels[indexPath.row].post_image_url))
+        cell.userProfileView.sd_setImage(with: URL(string: viewModels[indexPath.row].user_image_url))
         
         return cell
         
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.fetchProfilePost().count ?? 0
+        return viewModels.count
     }
     
 }
@@ -94,5 +98,87 @@ extension ListViewController: IndicatorInfoProvider {
         let image = UIImage(named: "list")?.withRenderingMode(.alwaysTemplate) // enable tint color
 
         return IndicatorInfo(image: image)
+    }
+}
+
+extension ListViewController: PostCollectionViewCellDelegate {
+    func didTapOptionMenuButton(post_id: Int, post_user_uuid: String) {
+        guard let sessionUser = sessionUser else { fatalError() }
+        
+        let deletePostAction = UIAlertAction(title: "Delete Post", style: .destructive) { [weak self] action in
+            
+            let json = [
+                "post_id": post_id
+            ]
+            
+            APICaller.shared.deletePost(with: json) { [weak self] error in
+                DispatchQueue.main.async {
+                    self?.dataSource?.fetchProfilePost()
+                }
+            }
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action in }
+        
+        let alert = UIAlertController()
+        
+        if sessionUser.user_uuid == post_user_uuid { // enable delete option if owner
+            alert.addAction(deletePostAction)
+        }
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true)
+    }
+    
+    func didTapCommentButton(post_id: Int?) {
+        
+        let vc = CommentViewController()
+        vc.post_id = post_id
+        vc.modalPresentationStyle = .overFullScreen
+        present(vc, animated: false)
+        
+
+    }
+    
+    func didTapLikeButton(for cell: PostCollectionViewCell) {
+        
+        guard let indexPath = collectionView.indexPath(for: cell) else { // get indexpath of return cell
+            print("cannot get indexPath!")
+            return
+        }
+        
+        guard let currentIGUser = sessionUser else {
+            print("current user is nil!")
+            return
+        }
+        
+
+        //===================== update UI to prevent wrong value when scroll =================
+        viewModels[indexPath.row].user_islike = cell.isLike
+        viewModels[indexPath.row].total_like = cell.likeCount
+        //self.collectionView?.reloadItems(at: [indexPath])
+        //====================================================================================
+        
+        let json: [String: Any] = [
+            "likePostUID": viewModels[indexPath.row].post_id,
+            "userUID": currentIGUser.user_uuid,
+            "createDate": Date().getFormattedTime()
+        ]
+        
+        APICaller.shared.addLike(with: json) { success in
+            
+        }
+    }
+    
+    func didTapLikeCounterButton(post_id: Int) {
+        
+        let followersListVC = FollowersListViewController(navigationBarTitle: "Likes")
+        followersListVC.currentContainerHeight = 500
+        followersListVC.post_id = post_id
+        followersListVC.viewType = .like
+        followersListVC.modalPresentationStyle = .overFullScreen
+        present(followersListVC, animated: false)
+        
     }
 }

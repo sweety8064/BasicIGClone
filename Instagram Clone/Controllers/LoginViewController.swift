@@ -56,8 +56,7 @@ class LoginViewController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.keyboardType = .emailAddress
         textField.placeholder = "Password"
-        textField.text = "123456Qwe"
-        textField.isSecureTextEntry = false
+        textField.isSecureTextEntry = true
     
         textField.delegate = self
         textField.addTarget(self, action: #selector(inputFieldDidChange), for: .editingChanged)

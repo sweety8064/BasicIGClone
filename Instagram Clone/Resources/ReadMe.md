@@ -1,6 +1,5 @@
 #  todolist
 
-- continue fetch post (using limit to SQL)
 - show large image when tapped on image
 - share photo banner should not be scroll
 - profile view should able to handle like properly
