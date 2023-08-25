@@ -26,6 +26,11 @@ class HomeViewController: UIViewController {
         }
     )
     
+    let fetchLimit = 5
+    var totalRecords = 0
+    var isLoading = false
+    var reachingEnd = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,20 +44,36 @@ class HomeViewController: UIViewController {
         
     }
     
-    func fetchPost(completion: (() -> Void)? = nil) {
+    func fetchPost(cleanOldData: Bool = true, completion: (() -> Void)? = nil) {
         
         guard let uid = sessionUser?.user_uuid else {
             print("uid is nil")
             return
         }
         
-        APICaller.shared.fetchPost(withUID: uid) { [weak self] result in
+        let json: [String: Any] = [
+            "uid": uid,
+            "offset": totalRecords
+        ]
+        
+        APICaller.shared.fetchPost(withUID: json) { [weak self] result in
             switch result {
             case .success(let model):
-                self?.posts.removeAll()
-                self?.viewModels.removeAll()
-                self?.posts = model
-                self?.configureViewModels()
+                if cleanOldData || self?.totalRecords == 0 { // for initial data
+                    self?.reachingEnd = false
+                    self?.posts.removeAll()
+                    self?.viewModels.removeAll()
+                    self?.posts = model
+                    self?.configureViewModels()
+                    self?.totalRecords = model.count
+                } else { // fetch next set of records
+                    if model.count != self?.fetchLimit { // prevent unlimited loop when reach end
+                        self?.reachingEnd = true
+                    }
+                    self?.posts.append(contentsOf: model)
+                    self?.configureViewModels(fromSpecficPosts: model)
+                    self?.totalRecords += model.count
+                }
                 DispatchQueue.main.async {
                     self?.collectionView.reloadData()
                 }
@@ -66,21 +87,37 @@ class HomeViewController: UIViewController {
     
 
     
-    func configureViewModels() {
-        for post in posts {
-            viewModels.append(PostViewModel(post_id: post.post_id,
-                                            post_user_uuid: post.post_user_uuid,
-                                            poster_name: post.post_username,
-                                            post_image_url: post.image_url,
-                                            user_image_url: post.user_image_url,
-                                            total_like: post.total_like,
-                                            caption: post.caption,
-                                            post_date_utc0: post.post_date_utc0,
-                                            user_islike: post.user_islike))
-            
-            
-        }
+    func configureViewModels(fromSpecficPosts: [Post]? = nil) {
         
+        if let posts = fromSpecficPosts {
+            for post in posts {
+                viewModels.append(PostViewModel(post_id: post.post_id,
+                                                post_user_uuid: post.post_user_uuid,
+                                                poster_name: post.post_username,
+                                                post_image_url: post.image_url,
+                                                user_image_url: post.user_image_url,
+                                                total_like: post.total_like,
+                                                caption: post.caption,
+                                                post_date_utc0: post.post_date_utc0,
+                                                user_islike: post.user_islike))
+                
+                
+            }
+        } else {
+            for post in posts {
+                viewModels.append(PostViewModel(post_id: post.post_id,
+                                                post_user_uuid: post.post_user_uuid,
+                                                poster_name: post.post_username,
+                                                post_image_url: post.image_url,
+                                                user_image_url: post.user_image_url,
+                                                total_like: post.total_like,
+                                                caption: post.caption,
+                                                post_date_utc0: post.post_date_utc0,
+                                                user_islike: post.user_islike))
+                
+                
+            }
+        }
     }
     
     func configureCollectionView() {
@@ -97,6 +134,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc private func didScrollUpRefresh() {
+        totalRecords = 0
         fetchPost { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.refreshControl?.endRefreshing()
@@ -195,8 +233,19 @@ extension HomeViewController: UICollectionViewDataSource {
     
 }
 
+//MARK: - UICollectionViewDelegate
+
 extension HomeViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let lastItem = posts.count - 1
+        
+        if indexPath.row == lastItem && !isLoading && !reachingEnd {
+            isLoading = true
+            fetchPost(cleanOldData: false) { [weak self] in
+                self?.isLoading = false
+            }
+        }
+    }
 }
 
 extension HomeViewController: PostCollectionViewCellDelegate {

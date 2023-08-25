@@ -67,14 +67,10 @@ struct APICaller {
         task.resume()
     }
     
-    func fetchPost(withUID userUID: String, completion: @escaping (Result<[Post], Error>) -> Void) {
+    func fetchPost(withUID userUID: [String: Any], completion: @escaping (Result<[Post], Error>) -> Void) {
         var request = URLRequest(url: URL(string: baseURL + "data")!)
         
-        let json = [
-            "uid": userUID
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: userUID) else {
             print("json serialization error orcurred!")
             return
         }

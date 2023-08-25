@@ -69,7 +69,7 @@ class MainTabBarController: UITabBarController {
         //============= define callback function =====================
         
         didPressHomeVC = { [weak vc1] in // if not weak "vc1" will hold by did
-            if self.selectedIndex == 0 { // if view already at top
+            if self.selectedIndex == 0 { // if UIScrollView Offset is already on top or 0
                 if vc1?.collectionView.contentOffset == CGPoint(x: 0, y: 0) {
                     vc1?.refreshControl.refreshManually()
                 } else {
