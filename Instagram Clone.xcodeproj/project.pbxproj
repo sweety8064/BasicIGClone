@@ -18,13 +18,11 @@
 		C38076E62A384BE500994128 /* TimeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38076E52A384BE500994128 /* TimeConverter.swift */; };
 		C386B15D2A53C07B00C9CF8A /* InstagramUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386B15C2A53C07B00C9CF8A /* InstagramUserViewModel.swift */; };
 		C386D08A2A209F85002705B8 /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386D0892A209F85002705B8 /* APICaller.swift */; };
-		C386D08C2A20A448002705B8 /* toPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386D08B2A20A448002705B8 /* toPost.swift */; };
 		C38AAAF52A1C69DE00880815 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38AAAF42A1C69DE00880815 /* PhotoCollectionViewCell.swift */; };
 		C38AAAF72A1C821C00880815 /* HeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38AAAF62A1C821C00880815 /* HeaderCollectionViewCell.swift */; };
 		C38DBD412A64F27F00EEF509 /* GridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38DBD402A64F27F00EEF509 /* GridViewController.swift */; };
 		C38DBD432A64F28D00EEF509 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38DBD422A64F28D00EEF509 /* ListViewController.swift */; };
 		C38DBD452A6512A800EEF509 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38DBD442A6512A800EEF509 /* TestController.swift */; };
-		C3992A5F2A416C2700A8FE7D /* toLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3992A5E2A416C2700A8FE7D /* toLike.swift */; };
 		C39B04812A147047009962C0 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39B04802A147047009962C0 /* HomeViewController.swift */; };
 		C39B04832A147050009962C0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39B04822A147050009962C0 /* SearchViewController.swift */; };
 		C39B04852A147069009962C0 /* AddPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39B04842A147069009962C0 /* AddPhotoViewController.swift */; };
@@ -73,14 +71,12 @@
 		C38076E52A384BE500994128 /* TimeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConverter.swift; sourceTree = "<group>"; };
 		C386B15C2A53C07B00C9CF8A /* InstagramUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramUserViewModel.swift; sourceTree = "<group>"; };
 		C386D0892A209F85002705B8 /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
-		C386D08B2A20A448002705B8 /* toPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toPost.swift; sourceTree = "<group>"; };
 		C38AAAF42A1C69DE00880815 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		C38AAAF62A1C821C00880815 /* HeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		C38B31BA2A662C2600C60F1E /* backup.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = backup.md; sourceTree = "<group>"; };
 		C38DBD402A64F27F00EEF509 /* GridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridViewController.swift; sourceTree = "<group>"; };
 		C38DBD422A64F28D00EEF509 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		C38DBD442A6512A800EEF509 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
-		C3992A5E2A416C2700A8FE7D /* toLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toLike.swift; sourceTree = "<group>"; };
 		C39B04802A147047009962C0 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C39B04822A147050009962C0 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C39B04842A147069009962C0 /* AddPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoViewController.swift; sourceTree = "<group>"; };
@@ -215,9 +211,7 @@
 		C39C67AE2A0C94D800737B2C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C386D08B2A20A448002705B8 /* toPost.swift */,
 				C3C328542A96FC8900B990F4 /* InstagramUserFollow.swift */,
-				C3992A5E2A416C2700A8FE7D /* toLike.swift */,
 				C33620462A2DBED2008F80DE /* Post.swift */,
 				C3F2F3D92A4D365700AEC28D /* InstagramUser.swift */,
 				C3A205982A5FC3ED00A4A132 /* Follow.swift */,
@@ -439,11 +433,9 @@
 				C3E7E7CB2A8A611500DA3E45 /* CommentViewController.swift in Sources */,
 				C39D770C2A678B3300D6C7C2 /* FollowViewModel.swift in Sources */,
 				C33620452A2D85B2008F80DE /* PostCollectionViewCell.swift in Sources */,
-				C3992A5F2A416C2700A8FE7D /* toLike.swift in Sources */,
 				C3A374742A95AB7B003E18CE /* BottomSheetViewController.swift in Sources */,
 				C3682A562A317C97002B75E1 /* PostViewModel.swift in Sources */,
 				C386D08A2A209F85002705B8 /* APICaller.swift in Sources */,
-				C386D08C2A20A448002705B8 /* toPost.swift in Sources */,
 				C3A374762A95AFEE003E18CE /* FollowersListViewController.swift in Sources */,
 				C3F2F3DA2A4D365700AEC28D /* InstagramUser.swift in Sources */,
 				C38DBD412A64F27F00EEF509 /* GridViewController.swift in Sources */,

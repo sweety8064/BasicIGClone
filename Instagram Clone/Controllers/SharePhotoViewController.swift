@@ -74,8 +74,13 @@ class SharePhotoViewController: UIViewController {
             return
         }
         
-        let post = toPost(uid: uid, caption: text)
-        APICaller.shared.createPost(withData: post, image: selectedPhoto) { [weak self] success in
+        let json = [
+            "uid": uid,
+            "caption": text,
+            "createDate": Date().getFormattedTime()
+        ]
+        
+        APICaller.shared.createPost(withData: json, image: selectedPhoto) { [weak self] success in
             if success {
                 DispatchQueue.main.async {
                     self?.dismiss(animated: true)

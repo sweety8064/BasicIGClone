@@ -3,10 +3,7 @@
 - continue fetch post (using limit to SQL)
 - show large image when tapped on image
 - share photo banner should not be scroll
-- follower and folling list
 - profile view should able to handle like properly
-- prevent delete other user post
-
 
 #  learning
 - to get button.tintColor work, button type must be system UIButton(type: .system)

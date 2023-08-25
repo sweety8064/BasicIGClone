@@ -257,10 +257,14 @@ extension HomeViewController: PostCollectionViewCellDelegate {
         viewModels[indexPath.row].total_like = cell.likeCount
         //self.collectionView?.reloadItems(at: [indexPath])
         //====================================================================================
-        let post_id = posts[indexPath.row].post_id
-        let like = toLike(userUID: currentIGUser.user_uuid, likePostUID: post_id)
         
-        APICaller.shared.addLike(with: like) { success in
+        let json: [String: Any] = [
+            "likePostUID": posts[indexPath.row].post_id,
+            "userUID": currentIGUser.user_uuid,
+            "createDate": Date().getFormattedTime()
+        ]
+        
+        APICaller.shared.addLike(with: json) { success in
             
         }
 

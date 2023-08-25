@@ -13,7 +13,7 @@ struct APICaller {
     static let shared = APICaller()
     let baseURL = "http://127.0.0.1:5000/"
     
-    func createPost(withData post: toPost, image: UIImage, completion: @escaping (Bool) -> ()) {
+    func createPost(withData post: [String: String], image: UIImage, completion: @escaping (Bool) -> ()) {
         
         //================= convert image into imageData =================================
         guard let imageData = image.pngData() else {
@@ -22,13 +22,7 @@ struct APICaller {
         }
         
         //================= convert json into jsonData ===================================
-        let json = [
-            "uid": post.uid,
-            "caption": post.caption,
-            "createDate": Date().getFormattedTime()
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: post) else {
             print("error convert to json data!")
             return
         }
@@ -254,18 +248,9 @@ struct APICaller {
         
     }
     
-    
-    
-    
-    func addLike(with like: toLike, completion: @escaping (_ success: Bool) -> Void) {
+    func addLike(with like: [String: Any], completion: @escaping (_ success: Bool) -> Void) {
         
-        let json: [String: Any] = [
-            "likePostUID": like.likePostUID,
-            "userUID": like.userUID,
-            "createDate": Date().getFormattedTime()
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: like) else {
             print("cannot convert addlike dic into jsonData!")
             return
         }
