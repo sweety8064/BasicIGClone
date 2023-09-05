@@ -63,7 +63,15 @@ class SharePhotoViewController: UIViewController {
             action: #selector(didTapNavigationPost))
     }
     
+    var isPostingInProgress = false // prevent spamming post when click button
+    
     @objc private func didTapNavigationPost() {
+        
+        guard !isPostingInProgress else {
+            print("posting in progress, pls dont click too fast")
+            return
+        }
+        isPostingInProgress = true
         
         guard let uid = Auth.auth().currentUser?.uid else {
             print("current username is nil!")
@@ -85,6 +93,7 @@ class SharePhotoViewController: UIViewController {
             if success {
                 DispatchQueue.main.async {
                     self?.dismiss(animated: true)
+                    self?.isPostingInProgress = false
                 }
             }
         }

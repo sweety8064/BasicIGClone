@@ -282,8 +282,8 @@ class PostCollectionViewCell: UICollectionViewCell {
         self.post_id = post.post_id
         self.post_user_uuid = post.post_user_uuid
         userNameLabel.text = post.poster_name
-        userProfileView.image = post.userImage
-        userPostImageView.image = post.postImage
+        userProfileView.sd_setImage(with: URL(string: post.user_image_url))
+        userPostImageView.sd_setImage(with: URL(string: post.post_image_url))
         likeCount = post.total_like
         postCaptionTextView.attributedText = post.formatedCaption
         postCaptionTextView.textContainer.maximumNumberOfLines = post.isCaptionExpanded == true ? 0 : 2

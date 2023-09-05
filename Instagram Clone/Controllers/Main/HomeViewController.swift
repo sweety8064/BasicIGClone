@@ -214,17 +214,17 @@ extension HomeViewController: UICollectionViewDataSource {
         
         cell.delegate = self
 
-        viewModels[indexPath.row].imageIsAvailable = { postImage in // set postImage when image is available
-            DispatchQueue.main.async { // handle image available after cell create
-                cell.userPostImageView.image = postImage
-            }
-        }
-        
-        viewModels[indexPath.row].userImageIsAvailable = { userImage in // set userProfileImage when image is available
-            DispatchQueue.main.async {
-                cell.userProfileView.image = userImage
-            }
-        }
+//        viewModels[indexPath.row].imageIsAvailable = { postImage in // set postImage when image is available
+//            DispatchQueue.main.async { // handle image available after cell create
+//                cell.userPostImageView.image = postImage
+//            }
+//        }
+//        
+//        viewModels[indexPath.row].userImageIsAvailable = { userImage in // set userProfileImage when image is available
+//            DispatchQueue.main.async {
+//                cell.userProfileView.image = userImage
+//            }
+//        }
         
         let post = viewModels[indexPath.row]
         cell.configure(with: post)

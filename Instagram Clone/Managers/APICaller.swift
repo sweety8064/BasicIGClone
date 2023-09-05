@@ -11,7 +11,7 @@ import UIKit
 struct APICaller {
     
     static let shared = APICaller()
-    let baseURL = "http://127.0.0.1:5000/"
+    let baseURL = "http://18.142.238.240:5000/"
     
     func createPost(withData post: [String: String], image: UIImage, completion: @escaping (Bool) -> ()) {
         

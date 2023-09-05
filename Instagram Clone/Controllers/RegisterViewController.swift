@@ -154,7 +154,16 @@ class RegisterViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
+    var isSignUpInProgress = false
+    
     @objc private func signUpButtonDidPress() {
+        
+        guard !isSignUpInProgress else {
+            print("signUpInProgress")
+            return
+        }
+        
+        isSignUpInProgress = true
         
         guard let email = emailTextField.text,
               let password = passwordTextField.text,
@@ -182,6 +191,7 @@ class RegisterViewController: UIViewController {
                 self?.navigationController?.popViewController(animated: true)
                 self?.handle?(email, password) //notify "registerViewController.handle" in LoginViewController
                 print("Successfully register!")
+                self?.isSignUpInProgress = false
             }
                 
 
