@@ -174,23 +174,21 @@ class CommentViewController: UIViewController {
     }
     
     private func createLayoutSection(section: Int) -> NSCollectionLayoutSection {
-        let section1: NSCollectionLayoutSection = {
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .estimated(30))
-            )
-            
-            let group = NSCollectionLayoutGroup.vertical(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .estimated(30)),
-                subitems: [item]
-            )
-            
-            let section = NSCollectionLayoutSection(group: group)
-            return section
-        }()
+
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(30))
+        )
         
-        return section1
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(30)),
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+        
     }
     
     func configureAutoLayout() { // call by viewDidLoad

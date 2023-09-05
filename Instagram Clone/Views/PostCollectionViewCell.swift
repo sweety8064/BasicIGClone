@@ -12,6 +12,7 @@ protocol PostCollectionViewCellDelegate: AnyObject {
     func didTapCommentButton(post_id: Int?)
     func didTapOptionMenuButton(post_id: Int, post_user_uuid: String)
     func didTapLikeCounterButton(post_id: Int)
+    func didTapShowMore(for cell: PostCollectionViewCell)
     
 }
 
@@ -100,10 +101,26 @@ class PostCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    let postCaptionLabel: UILabel = {
-        let label = UILabel()
+    lazy var postCaptionTextView: UITextView = {
+        let label = UITextView()
+        label.isScrollEnabled = false
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPostCaptionLabel)))
+        label.textContainer.lineFragmentPadding = 0 // remove padding
+        label.textContainer.maximumNumberOfLines = 2
+        label.isSelectable = false
+        label.textContainer.lineBreakMode = .byTruncatingTail // make string to ... if too much
+        label.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return label
     }()
+    
+//    lazy var readMoreButton: UIButton = {
+//        let button = UIButton()
+//        button.titleLabel?.font = .systemFont(ofSize: 14)
+//        button.setTitleColor(.gray, for: .normal)
+//        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0.01, bottom: 0.01, right: 0)
+//        button.addTarget(self, action: #selector(didTapReadMoreButton), for: .touchUpInside)
+//        return button
+//    }()
     
     let timeAgoLabel: UILabel = {
         let label = UILabel()
@@ -144,17 +161,21 @@ class PostCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(stackView)
         contentView.addSubview(bookmarkButton)
         contentView.addSubview(likeCounterButton)
-        contentView.addSubview(postCaptionLabel)
+        contentView.addSubview(postCaptionTextView)
         contentView.addSubview(timeAgoLabel)
         
         likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         commentButton.addTarget(self, action: #selector(didTapCommentButton), for: .touchUpInside)
+        
+        configureAutoLayout()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        configureAutoLayout()
+        
     }
+    
+    
     
     @objc private func didTapOptionMenuButton() {
         
@@ -167,6 +188,15 @@ class PostCollectionViewCell: UICollectionViewCell {
             delegate?.didTapOptionMenuButton(post_id: post_id, post_user_uuid: post_user_uuid)
         }
         
+        
+    }
+    
+    @objc func didTapPostCaptionLabel() {
+        
+        postCaptionTextView.textContainer.maximumNumberOfLines = 0
+        
+        postCaptionTextView.invalidateIntrinsicContentSize() // notice uikit to update UITextView
+        delegate?.didTapShowMore(for: self)
         
     }
     
@@ -234,24 +264,29 @@ class PostCollectionViewCell: UICollectionViewCell {
         likeCounterButton.anchor(top: stackView.bottomAnchor,
                            leading: contentView.leadingAnchor,
                            topConstant: 2, leadingConstant: 12)
-        postCaptionLabel.anchor(top: likeCounterButton.bottomAnchor,
+        postCaptionTextView.anchor(top: likeCounterButton.bottomAnchor,
                                 leading: contentView.leadingAnchor,
+                                bottom: timeAgoLabel.topAnchor,
                                 trailing: contentView.trailingAnchor,
-                                leadingConstant: 12, TrailingConstant: -12)
-        timeAgoLabel.anchor(top: postCaptionLabel.bottomAnchor,
-                              leading: contentView.leadingAnchor,
-                              topConstant: 6, leadingConstant: 12)
+                                leadingConstant: 12, bottomConstant: -8, TrailingConstant: -12)
+        
+        
+        timeAgoLabel.anchor(leading: contentView.leadingAnchor,
+                            bottom: contentView.bottomAnchor,
+                            leadingConstant: 12, bottomConstant: -30)
         
     }
     
     func configure(with post: PostViewModel) {
+        
         self.post_id = post.post_id
         self.post_user_uuid = post.post_user_uuid
         userNameLabel.text = post.poster_name
         userProfileView.image = post.userImage
         userPostImageView.image = post.postImage
         likeCount = post.total_like
-        postCaptionLabel.attributedText = post.formatedCaption
+        postCaptionTextView.attributedText = post.formatedCaption
+        postCaptionTextView.textContainer.maximumNumberOfLines = post.isCaptionExpanded == true ? 0 : 2
         timeAgoLabel.text = post.timeAgo
         isLike = post.user_islike
         

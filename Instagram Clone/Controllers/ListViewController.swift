@@ -28,11 +28,18 @@ class ListViewController: UIViewController {
     
     private func createLayoutSection(section: Int) -> NSCollectionLayoutSection {
 
-        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(600)))
+
         
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 50, trailing: 0)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(600)), subitems: [item])
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(600)),
+            subitems: [item]
+        )
+        
         
         let section = NSCollectionLayoutSection(group: group)
         return section
@@ -102,6 +109,20 @@ extension ListViewController: IndicatorInfoProvider {
 }
 
 extension ListViewController: PostCollectionViewCellDelegate {
+    func didTapShowMore(for cell: PostCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { // get indexpath of return cell
+            print("cannot get indexPath!")
+            return
+        }
+        
+        viewModels[indexPath.row].isCaptionExpanded = true
+
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.layoutIfNeeded()
+        
+        dataSource?.didFinishConfigCV()
+    }
+    
     func didTapOptionMenuButton(post_id: Int, post_user_uuid: String) {
         guard let sessionUser = sessionUser else { fatalError() }
         

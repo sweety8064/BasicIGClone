@@ -158,18 +158,25 @@ class HomeViewController: UIViewController {
     }
     
     private func createLayoutSection(section: Int) -> NSCollectionLayoutSection {
-        let section1: NSCollectionLayoutSection = {
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-            
-            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 50, trailing: 0)
-            
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(600)), subitems: [item])
-            
-            let section = NSCollectionLayoutSection(group: group)
-            return section
-        }()
+
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(600)))
+
         
-        return section1
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(600)),
+            subitems: [item]
+        )
+        
+        
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+        
+        
+
     }
     
     @objc private func didTapNVMenu() {
@@ -238,6 +245,7 @@ extension HomeViewController: UICollectionViewDataSource {
 
 extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
         let lastItem = posts.count - 1
         
         if indexPath.row == lastItem && !isLoading && !reachingEnd {
@@ -262,6 +270,7 @@ extension HomeViewController: PostCollectionViewCellDelegate {
             
             APICaller.shared.deletePost(with: json) { [weak self] error in
                 DispatchQueue.main.async {
+                    self?.totalRecords = 0
                     self?.fetchPost()
                 }
             }
@@ -330,6 +339,18 @@ extension HomeViewController: PostCollectionViewCellDelegate {
         followersListVC.modalPresentationStyle = .overFullScreen
         present(followersListVC, animated: false)
         
+    }
+    
+    func didTapShowMore(for cell: PostCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { // get indexpath of return cell
+            print("cannot get indexPath!")
+            return
+        }
+        
+        viewModels[indexPath.row].isCaptionExpanded = true
+        
+        collectionView.collectionViewLayout.invalidateLayout()
+
     }
 }
 

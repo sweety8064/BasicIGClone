@@ -10,3 +10,4 @@
 - to get auto resize textView, must be autolayout top leading trailing bottom, no height
 - inorder to get compositional layout auto height work, set estimated, and configure autolayout in viewdidload, not at layoutsubview
 - custom init view controller at xlViewController 
+- do layoutIfNeeded sometime uicollectionview will not update contentSize immediately

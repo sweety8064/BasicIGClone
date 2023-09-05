@@ -26,6 +26,7 @@ class SharePhotoViewController: UIViewController {
         textView.autocorrectionType = .no
         textView.placeHolderLabel.text = "Add a caption..."
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.textContainer.lineBreakMode = .byClipping
         return textView
     }()
     

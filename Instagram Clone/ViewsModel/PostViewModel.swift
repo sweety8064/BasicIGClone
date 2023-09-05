@@ -21,6 +21,7 @@ class PostViewModel {
     var postImage: UIImage?
     var userImage: UIImage?
     var user_islike: Bool
+    var isCaptionExpanded = false
     
     var imageIsAvailable: ((UIImage?) -> Void)?
     var userImageIsAvailable: ((UIImage?) -> Void)?
@@ -67,7 +68,6 @@ class PostViewModel {
     
     private func formatCaption(withUser: String, caption: String) -> NSAttributedString {
         let text: String = "\(withUser) \(caption)"
-        let attributedString: NSMutableAttributedString = NSMutableAttributedString(string: text)
         
         // ===================== user attribute and range =========================================
         let boldRangeUser = (text as NSString).range(of: withUser)
@@ -78,6 +78,8 @@ class PostViewModel {
         let boldAttributesCaption = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]
         
         // ============================================================================
+        
+        let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttributes(boldAttributesUser, range: boldRangeUser)
         attributedString.addAttributes(boldAttributesCaption, range: boldRangeCaption)
         
